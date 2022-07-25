@@ -1,22 +1,27 @@
 import { useEffect, useMemo, useState } from "react";
 import { PlaybackEvent, VideoGroup } from "./common";
 import { TeslaFS } from "./TeslaFS";
+import { getSortedKeys } from "./utils";
 
-export function useCurrentClipTimestamp(currentEventTimestamps: string[], currentEvent: PlaybackEvent | null) {
-  const [currentClipTimestamp, setCurrentTimestamp] = useState<TeslaFS.Timestamp | null>(null);
+export function useCurrentEventClips(currentEvent: PlaybackEvent | null) {
+  const currentEventTimestamps = useMemo(() => (currentEvent ? getSortedKeys(currentEvent) : null), [currentEvent]);
+  const [currentClipsTimestamp, setCurrentClipsTimestamp] = useState<TeslaFS.Timestamp | null>(null);
   useEffect(() => {
-    const [timestamp] = currentEventTimestamps;
-    setCurrentTimestamp(timestamp);
+    // Only trigger on first load or after manual reset, so this does not set clip index to first when nav with play control
+    if (currentClipsTimestamp === null && currentEventTimestamps) {
+      const [timestamp] = currentEventTimestamps;
+      setCurrentClipsTimestamp(timestamp);
+    }
   }, [currentEventTimestamps]);
 
-  const currentPlaybackVideos: VideoGroup | null = useMemo(
-    () => (currentClipTimestamp && currentEvent && currentEvent[currentClipTimestamp]) || null,
-    [currentClipTimestamp, currentEvent]
+  const currentClips: VideoGroup | null = useMemo(
+    () => (currentClipsTimestamp && currentEvent && currentEvent[currentClipsTimestamp]) || null,
+    [currentClipsTimestamp, currentEvent]
   );
 
   return {
-    currentClipTimestamp,
-    setCurrentTimestamp,
-    currentPlaybackVideos,
+    currentClipsTimestamp,
+    setCurrentClipsTimestamp,
+    currentClips,
   };
 }

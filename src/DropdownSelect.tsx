@@ -1,3 +1,6 @@
+import { ActionList, ActionMenu } from "@primer/react";
+import { ReactNode } from "react";
+
 export function DropdownSelect<T extends string>({
   value,
   onChange,
@@ -6,20 +9,24 @@ export function DropdownSelect<T extends string>({
 }: {
   value: T;
   onChange: (value: T) => void;
-  title?: string;
+  title?: ReactNode;
   options: {
     label: string;
     value: T;
   }[];
 }) {
   return (
-    <select value={value} onChange={(e) => onChange(e.target.value as T)}>
-      {options.map(({ label, value }) => (
-        <option key={value} value={value}>
-          {title}
-          {label}
-        </option>
-      ))}
-    </select>
+    <ActionMenu>
+      <ActionMenu.Button>{title}</ActionMenu.Button>
+      <ActionMenu.Overlay>
+        <ActionList selectionVariant="single">
+          {options.map(({ label, value: optionValue }) => (
+            <ActionList.Item key={optionValue} selected={optionValue === value} onSelect={() => onChange(optionValue)}>
+              {label}
+            </ActionList.Item>
+          ))}
+        </ActionList>
+      </ActionMenu.Overlay>
+    </ActionMenu>
   );
 }

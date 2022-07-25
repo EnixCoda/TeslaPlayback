@@ -4,7 +4,7 @@ export namespace TeslaFS {
     | `${string}-${string}-${string}_${string}-${string}-${string}` // YYYY-MM-DD_HH-MM-SS
     | `${string}-${string}-${string}_${string}-${string}`; // YYYY-MM-DD_HH-MM
 
-  export const clipScopes = ["Recent Clips", "Saved Clips", "Sentry Clips"] as const;
+  export const clipScopes = ["RecentClips", "SavedClips", "SentryClips"] as const;
   export type ClipScope = ValueOfArray<typeof clipScopes>;
 
   export const SUFFIXES = {

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { PlaybackEventGroup } from "./common";
 import { TeslaFS } from "./TeslaFS";
+import { getSortedKeys } from "./utils";
 
 export function useCurrentEvent(allEventTimestampsOrdered: string[], eventGroup: PlaybackEventGroup) {
   const [currentEventTimestamp, setCurrentEventTimestamp] = useState<TeslaFS.Timestamp | null>(null);
@@ -10,7 +11,7 @@ export function useCurrentEvent(allEventTimestampsOrdered: string[], eventGroup:
   }, [allEventTimestampsOrdered]);
 
   const currentEvent = useMemo(() => (currentEventTimestamp && eventGroup[currentEventTimestamp]) || null, [currentEventTimestamp, eventGroup]);
-  const currentEventTimestamps: TeslaFS.Timestamp[] = useMemo(() => (currentEvent ? Object.keys(currentEvent).sort() : []), [currentEvent]);
+  const currentEventTimestamps = useMemo(() => (currentEvent ? getSortedKeys(currentEvent) : []), [currentEvent]);
   return {
     currentEvent,
     setCurrentEventTimestamp,

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Directions, PlaybackEventGroup } from "./common";
+import { ClipCategorizedEvents, Directions, PlaybackEventGroup } from "./common";
 import { TeslaFS } from "./TeslaFS";
 
 const suffixToDirectionMap: Record<ValueOf<typeof TeslaFS.SUFFIXES>, Directions> = {
@@ -12,10 +12,15 @@ const suffixToDirectionMap: Record<ValueOf<typeof TeslaFS.SUFFIXES>, Directions>
 
 const findTimestamp = (str?: string): TeslaFS.Timestamp | undefined => str?.match(/\d{4}-\d{2}-\d{2}_\d{2}-\d{2}(-\d{2})?/)?.[0];
 
-export function useLoadSelectedFiles(setEventGroup: ReactSet<PlaybackEventGroup>) {
+export function useLoadSelectedFiles(setEventGroup: ReactSet<PlaybackEventGroup>, setScopes: ReactSet<ClipCategorizedEvents>) {
   return React.useCallback((files: FileList | null) => {
     if (files === null) return;
 
+    const scopes: ClipCategorizedEvents = {
+      RecentClips: [],
+      SavedClips: [],
+      SentryClips: [],
+    };
     const newSavedEvents: PlaybackEventGroup = {};
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -31,6 +36,9 @@ export function useLoadSelectedFiles(setEventGroup: ReactSet<PlaybackEventGroup>
         console.warn(`"${file.name}" is unrecognizable: "${file.webkitRelativePath}"`);
         continue;
       }
+
+      const scope = TeslaFS.clipScopes.find((scope) => splitDirectories.includes(scope));
+      if (scope) scopes[scope]?.push(eventTimestamp);
 
       const event = (newSavedEvents[eventTimestamp] ||= {});
 
@@ -48,5 +56,6 @@ export function useLoadSelectedFiles(setEventGroup: ReactSet<PlaybackEventGroup>
     }
 
     setEventGroup(newSavedEvents);
+    setScopes(scopes);
   }, []);
 }

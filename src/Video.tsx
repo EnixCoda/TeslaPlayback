@@ -17,10 +17,14 @@ export function Video({ file, title, playbackRate = 1, native, play, progress }:
   useEffect(() => {
     const video = ref.current;
     if (video) {
-      video.addEventListener("error", (e) => {
+      const handleError = (e: ErrorEvent): void => {
         console.error(`Video error on ${title}`, video.error);
         setError(e.error);
-      });
+      };
+      video.addEventListener("error", handleError);
+      return () => {
+        video.removeEventListener("error", handleError);
+      };
     }
   }, []);
 
@@ -41,7 +45,11 @@ export function Video({ file, title, playbackRate = 1, native, play, progress }:
   useEffect(() => {
     const video = ref.current;
     if (video) {
-      if (play) video.play().catch(setError);
+      if (play)
+        video.play().catch(() => {
+          // catching here prevent raising to upper global scope
+          // let native DOM event listener above handle error
+        });
       else video.pause();
     }
   }, [play]);
@@ -60,7 +68,7 @@ export function Video({ file, title, playbackRate = 1, native, play, progress }:
         {title}
         {error && <span>{error.message}</span>}
       </div>
-      <video ref={ref} playsInline {...native} style={{ width: "100%", ...native?.style }} />
+      <video ref={ref} playsInline onContextMenu={(e) => e.preventDefault()} {...native} style={{ width: "100%", ...native?.style }} />
     </div>
   );
 }

@@ -10,7 +10,7 @@ export function LayoutComposer({
   style?: React.CSSProperties;
 }) {
   return (
-    <div style={{ display: "flex", position: "relative", transition: ".25s linear all", ...style }}>
+    <div style={{ display: "flex", position: "relative", ...style }}>
       {React.Children.map(React.Children.toArray(children), (child, index) =>
         React.isValidElement(child) && child.key !== null ? decorator(index, child) : child
       )}

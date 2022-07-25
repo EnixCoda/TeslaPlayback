@@ -27,3 +27,9 @@ export const pipe: Pipe =
   (...fns: any[]) =>
   (...args: any[]) =>
     args.reduce((acc, fn) => fn(acc), fns[0](...args));
+
+export function getSortedKeys<T extends string, V>(eventGroup: {
+  [key in T]: V;
+}): T[] {
+  return Object.keys(eventGroup).sort() as T[];
+}
