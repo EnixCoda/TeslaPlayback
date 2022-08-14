@@ -21,6 +21,7 @@
     "@types/react-dom": "^18"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.10.1",
     "@primer/react": "^35.5.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",

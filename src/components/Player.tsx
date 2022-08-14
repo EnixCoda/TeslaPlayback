@@ -1,10 +1,11 @@
 import { ChevronLeftIcon, ChevronRightIcon, ColumnsIcon, PlayIcon, StopwatchIcon, VersionsIcon } from "@primer/octicons-react";
-import { Box, Checkbox, FormControl, IconButton, Text } from "@primer/react";
+import { Box, Button, Checkbox, FormControl, IconButton, ProgressBar as PrimerProgressBar, Text } from "@primer/react";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { VideoGroup } from "../common";
 import { LayoutKey, layoutKeys, useVideosLayout } from "../useVideosLayout";
-import { formatHMS } from "../utils/general";
+import { mergeVideos } from "../utils/exportVideo";
+import { downloadBlob, formatHMS } from "../utils/general";
 import { DropdownSelect } from "./DropdownSelect";
 import { LayoutComposer } from "./LayoutComposer";
 import { ProgressBar } from "./ProgressBar";
@@ -38,6 +39,8 @@ export function Player({ videos, playSibling }: { videos: VideoGroup; playSiblin
     },
     [isAutoPlay, playSibling]
   );
+
+  const [convertProgress, setConvertProgress] = useState(0);
 
   return (
     <Box display="flex" flexDirection="column" border="1px solid transparent" borderColor={"canvas.default"} sx={{ gap: 4 }}>
@@ -89,6 +92,17 @@ export function Player({ videos, playSibling }: { videos: VideoGroup; playSiblin
           <FormControl.Label sx={{ whiteSpace: "nowrap" }}>Auto Play</FormControl.Label>
         </FormControl>
       </Box>
+      <Button
+        onClick={async () => {
+          if (videos.front && videos.back) {
+            const outputFile = await mergeVideos(videos.front, videos.back, (p) => setConvertProgress(p.ratio));
+            downloadBlob(outputFile, "output.mp4", 'video/mp4; codecs="mp4s"');
+          }
+        }}
+      >
+        Export
+      </Button>
+      <PrimerProgressBar progress={convertProgress * 100} />
       <Box bg="neutral.muted" borderWidth={1} borderStyle="solid" borderColor="border.default" borderRadius={4}>
         <LayoutComposer
           style={layout.container}

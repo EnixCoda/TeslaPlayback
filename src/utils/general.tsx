@@ -33,3 +33,39 @@ export function getSortedKeys<T extends string, V>(eventGroup: {
 }): T[] {
   return Object.keys(eventGroup).sort() as T[];
 }
+
+export const downloadURL = (data: string, fileName: string) => {
+  const a = document.createElement("a");
+  a.href = data;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.style.display = "none";
+  a.click();
+  a.remove();
+};
+
+export const downloadBlob = (data: Uint8Array, fileName: string, mimeType: string) => {
+  const blob = new Blob([data], {
+    type: mimeType,
+  });
+
+  const url = window.URL.createObjectURL(blob);
+
+  downloadURL(url, fileName);
+
+  setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+};
+
+export function readFileAsArrayBuffer(file: File) {
+  return new Promise<ArrayBuffer>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("loadend", () => {
+      const { result } = reader;
+      if (result instanceof ArrayBuffer) return resolve(result);
+      console.error(`Unexpected loaded data type`, result);
+      reject();
+    });
+    reader.addEventListener("error", reject);
+    reader.readAsArrayBuffer(file);
+  });
+}
