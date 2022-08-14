@@ -30,10 +30,14 @@ export function Video({ file, title, playbackRate = 1, native, play, progress }:
 
   useEffect(() => {
     const video = ref.current;
-    if (video && file) {
-      setError(null);
-      video.src = URL.createObjectURL(file);
-      video.playbackRate = playbackRate;
+    if (video) {
+      if (file) {
+        setError(null);
+        video.src = URL.createObjectURL(file);
+        video.playbackRate = playbackRate;
+      } else {
+        video.src = "";
+      }
     }
   }, [file]);
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { PlaybackEventGroup } from "./common";
-import { getSortedKeys } from "./utils";
+import { getSortedKeys } from "./utils/general";
 
 export function usePlaySibling(
   eventGroup: PlaybackEventGroup,

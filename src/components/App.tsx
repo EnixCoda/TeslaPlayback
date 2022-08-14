@@ -1,17 +1,17 @@
-import { BaseStyles, Box, CounterLabel, Header, Heading, ThemeProvider } from "@primer/react";
+import { BaseStyles, Box, CounterLabel, Header, Heading, Link, ThemeProvider } from "@primer/react";
 import { useEffect, useMemo, useState } from "react";
-import { ClipCategorizedEvents, PlaybackEventGroup } from "./common";
+import { ClipCategorizedEvents, PlaybackEventGroup } from "../common";
+import { TeslaFS } from "../TeslaFS";
+import { useCurrentEventClips } from "../useCurrentClipTimestamp";
+import { useCurrentEvent } from "../useCurrentEvent";
+import { useLoadSelectedFiles } from "../useLoadSelectedFiles";
+import { usePlaySibling } from "../usePlaySibling";
+import { getSortedKeys } from "../utils/general";
 import { LoadFilesButton } from "./LoadFilesButton";
 import { Player } from "./Player";
 import { SubNavs } from "./SubNavs";
-import { TeslaFS } from "./TeslaFS";
 import { TimestampSelect } from "./TimestampSelect";
 import { UsageGuide } from "./UsageGuide";
-import { useCurrentEventClips } from "./useCurrentClipTimestamp";
-import { useCurrentEvent } from "./useCurrentEvent";
-import { useLoadSelectedFiles } from "./useLoadSelectedFiles";
-import { usePlaySibling } from "./usePlaySibling";
-import { getSortedKeys } from "./utils";
 
 export function App() {
   const [allEventGroup, setAllEventGroup] = useState<PlaybackEventGroup>({});
@@ -96,7 +96,9 @@ export function App() {
               </Box>
             )}
           </Box>
-          <Box as="footer">CopyRight</Box>
+          <Box as="footer">
+            Made by <Link href="https://github.com/EnixCoda">EnixCoda</Link>
+          </Box>
         </Box>
       </BaseStyles>
     </ThemeProvider>

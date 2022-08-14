@@ -2,12 +2,12 @@ import { ChevronLeftIcon, ChevronRightIcon, ColumnsIcon, PlayIcon, StopwatchIcon
 import { Box, Checkbox, FormControl, IconButton, Text } from "@primer/react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { VideoGroup } from "./common";
+import { VideoGroup } from "../common";
+import { LayoutKey, layoutKeys, useVideosLayout } from "../useVideosLayout";
+import { formatHMS } from "../utils/general";
 import { DropdownSelect } from "./DropdownSelect";
 import { LayoutComposer } from "./LayoutComposer";
 import { ProgressBar } from "./ProgressBar";
-import { LayoutKey, layoutKeys, useVideosLayout } from "./useVideosLayout";
-import { formatHMS } from "./utils";
 import { Video } from "./Video";
 
 export function Player({ videos, playSibling }: { videos: VideoGroup; playSibling?: (offset: 1 | -1) => void }) {

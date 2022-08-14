@@ -1,5 +1,5 @@
 import { SubNav } from "@primer/react";
-import { TeslaFS } from "./TeslaFS";
+import { TeslaFS } from "../TeslaFS";
 
 export function SubNavs({
   options,

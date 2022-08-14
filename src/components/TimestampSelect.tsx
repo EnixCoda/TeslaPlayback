@@ -1,6 +1,6 @@
 import { NavList } from "@primer/react";
-import { TeslaFS } from "./TeslaFS";
-import { formatTimestamp } from "./utils";
+import { TeslaFS } from "../TeslaFS";
+import { formatTimestamp } from "../utils/general";
 
 export function TimestampSelect({
   options,

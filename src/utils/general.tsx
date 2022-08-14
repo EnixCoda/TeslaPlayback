@@ -1,4 +1,4 @@
-import { TeslaFS } from "./TeslaFS";
+import { TeslaFS } from "../TeslaFS";
 
 export function formatTimestamp(timestamp: TeslaFS.Timestamp) {
   const [date, time] = timestamp.split("_").map((part) => part.split("-"));
