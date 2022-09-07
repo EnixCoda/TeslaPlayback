@@ -9,7 +9,7 @@
   "devDependencies": {
     "@types/node": "^18.6.1",
     "fsevents": "^2.3.2",
-    "parcel-bundler": "^1.12.5",
+    "parcel-bundler": "file:../parcel/packages/core/parcel-bundler",
     "prettier": "^2.7.1",
     "typescript": "^4.7.4"
   },

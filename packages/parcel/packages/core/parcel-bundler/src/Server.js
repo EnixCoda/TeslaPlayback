@@ -17,7 +17,13 @@ serveStatic.mime.define({
 });
 
 function setHeaders(res) {
+  enableSecureOrigin(res);
   enableCors(res);
+}
+
+function enableSecureOrigin(res) {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
 }
 
 function enableCors(res) {
