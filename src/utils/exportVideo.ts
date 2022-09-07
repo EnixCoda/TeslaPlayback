@@ -1,5 +1,14 @@
-import { createFFmpeg, ProgressCallback } from "@ffmpeg/ffmpeg";
+import type { ProgressCallback } from "@ffmpeg/ffmpeg";
 import { readFileAsArrayBuffer } from "./general";
+
+// import ffmpeg from "../ffmpeg-core/dist/ffmpeg-core.wasm";
+
+// console.log(ffmpeg);
+// console.log(
+//   ffmpeg({
+//     a: "",
+//   })
+// );
 
 const filenames = {
   front: "input_front.mp4",
@@ -51,6 +60,7 @@ export const mergeVideos = async (frontFile: File, backFile: File, onProgress?: 
 };
 
 async function loadFFMpeg() {
+  const { createFFmpeg } = await import("@ffmpeg/ffmpeg");
   const ffmpeg = createFFmpeg({
     corePath: `https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js`,
     log: true,

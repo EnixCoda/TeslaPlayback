@@ -12,8 +12,11 @@
   <div id="app">
     <noscript>Please enable JavaScript to continue.</noscript>
   </div>
-
-  <script src="./index.tsx"></script>
+  <script>
+    window.global = window;
+    var parcelRequire;
+  </script>
+  <script type="module" src="./index.tsx"></script>
 </body>
 
 </html>

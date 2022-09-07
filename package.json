@@ -16,6 +16,9 @@
   "prettier": {
     "printWidth": 150
   },
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
   "resolutions": {
     "@types/react": "^18",
     "@types/react-dom": "^18"
