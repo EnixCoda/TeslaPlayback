@@ -1,0 +1,9 @@
+# Always use unix style line-endings
+* text eol=lf
+*.jpeg binary
+*.jpg binary
+*.png binary
+*.wasm binary
+*.woff2 binary
+.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text

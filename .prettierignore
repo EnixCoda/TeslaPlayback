@@ -1,0 +1,6 @@
+packages/*/*/src/builtins
+packages/*/*/test/integration
+packages/*/*/test/input
+packages/*/*/test/dist
+packages/*/*/test/mochareporters.json
+tmp
