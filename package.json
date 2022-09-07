@@ -1,36 +1,9 @@
 {
-  "name": "tesla-playback",
+  "name": "tesla-playback-package",
+  "private": "true",
   "version": "1.0.0",
-  "scripts": {
-    "dev": "parcel start src/index.html watch",
-    "build": "parcel build src/index.html"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^18.6.1",
-    "fsevents": "^2.3.2",
-    "parcel-bundler": "^1.12.5",
-    "prettier": "^2.7.1",
-    "typescript": "^4.7.4"
-  },
-  "prettier": {
-    "printWidth": 150
-  },
-  "browserslist": [
-    "last 1 Chrome version"
-  ],
-  "resolutions": {
-    "@types/react": "^18",
-    "@types/react-dom": "^18"
-  },
-  "dependencies": {
-    "@ffmpeg/ffmpeg": "^0.10.1",
-    "@primer/react": "^35.5.0",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "classnames": "^2.3.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "styled-components": "^5.3.5"
-  }
+  "main": "index.js",
+  "repository": "git@github.com:EnixCoda/TeslaPlayback.git",
+  "author": "EnixCoda <enixcoda@gmail.com>",
+  "license": "MIT"
 }
