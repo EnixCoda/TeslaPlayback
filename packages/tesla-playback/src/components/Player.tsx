@@ -11,6 +11,8 @@ import { LayoutComposer } from "./LayoutComposer";
 import { ProgressBar } from "./ProgressBar";
 import { Video } from "./Video";
 
+const enableExport = process.env.ENABLE_EXPORT === "true" && window.isSecureContext;
+
 export function Player({ videos, playSibling }: { videos: VideoGroup; playSibling?: (offset: 1 | -1) => void }) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isAutoPlay, setIsAutoPlay] = useState<boolean>(isPlaying); // should equal on initial
@@ -92,17 +94,21 @@ export function Player({ videos, playSibling }: { videos: VideoGroup; playSiblin
           <FormControl.Label sx={{ whiteSpace: "nowrap" }}>Auto Play</FormControl.Label>
         </FormControl>
       </Box>
-      <Button
-        onClick={async () => {
-          if (videos.front && videos.back) {
-            const outputFile = await mergeVideos(videos.front, videos.back, (p) => setConvertProgress(p.ratio));
-            downloadBlob(outputFile, "output.mp4", 'video/mp4; codecs="mp4s"');
-          }
-        }}
-      >
-        Export
-      </Button>
-      <PrimerProgressBar progress={convertProgress * 100} />
+      {enableExport && (
+        <>
+          <Button
+            onClick={async () => {
+              if (videos.front && videos.back) {
+                const outputFile = await mergeVideos(videos.front, videos.back, (p) => setConvertProgress(p.ratio));
+                downloadBlob(outputFile, "output.mp4", 'video/mp4; codecs="mp4s"');
+              }
+            }}
+          >
+            Export
+          </Button>
+          <PrimerProgressBar progress={convertProgress * 100} />
+        </>
+      )}
       <Box bg="neutral.muted" borderWidth={1} borderStyle="solid" borderColor="border.default" borderRadius={4}>
         <LayoutComposer
           style={layout.container}
