@@ -64,7 +64,7 @@ export function App() {
               </Header.Link>
             </Header.Item>
           </Header>
-          <Box display="flex" flexDirection={["column", "column", "row"]} sx={{ gap: 1 }} m={3} overflow="auto">
+          <Box display="flex" flexDirection={["column", "column", "row"]} sx={{ gap: 1 }} m={3} pb={2} overflow="auto">
             <Box as="section" display="flex" flexDirection="column" sx={{ flexShrink: 0, flexGrow: 0, gap: 3 }}>
               <Box>
                 <LoadFilesButton onLoad={loadSelectedFiles} />
