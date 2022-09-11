@@ -96,7 +96,7 @@ export const mergeVideos = async (frontFile: File, backFile: File, onProgress?: 
 async function loadFFMpeg() {
   // const { createFFmpeg } = await import("@ffmpeg/ffmpeg");
   const ffmpeg = createFFmpeg({
-    corePath: `https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js`,
+    corePath: `https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js`,
     log: true,
   });
   await ffmpeg.load();
