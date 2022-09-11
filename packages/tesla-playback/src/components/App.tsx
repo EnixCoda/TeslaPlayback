@@ -1,4 +1,4 @@
-import { BaseStyles, Box, CounterLabel, Header, Heading, Link, ThemeProvider } from "@primer/react";
+import { BaseStyles, Box, CounterLabel, Header, Heading, ThemeProvider } from "@primer/react";
 import { useEffect, useMemo, useState } from "react";
 import { ClipCategorizedEvents, PlaybackEventGroup } from "../common";
 import { TeslaFS } from "../TeslaFS";
@@ -51,8 +51,20 @@ export function App() {
             <Heading as={"h1"} sx={{ fontSize: 24 }}>
               Tesla Playback
             </Heading>
+            <Header.Item full />
+            <Header.Item>
+              Made
+              By
+              &nbsp;
+              <Header.Link
+                target="_blank"
+                href="https://github.com/EnixCoda"
+              >
+                EnixCoda
+              </Header.Link>
+            </Header.Item>
           </Header>
-          <Box display="flex" flexDirection={["column", "column", "row"]} sx={{ gap: 1 }} m={2}>
+          <Box display="flex" flexDirection={["column", "column", "row"]} sx={{ gap: 1 }} m={3} overflow="auto">
             <Box as="section" display="flex" flexDirection="column" sx={{ flexShrink: 0, flexGrow: 0, gap: 3 }}>
               <Box>
                 <LoadFilesButton onLoad={loadSelectedFiles} />
@@ -95,9 +107,6 @@ export function App() {
                 <Player playSibling={playSibling} videos={currentClips} />
               </Box>
             )}
-          </Box>
-          <Box as="footer">
-            Made by <Link href="https://github.com/EnixCoda">EnixCoda</Link>
           </Box>
         </Box>
       </BaseStyles>
