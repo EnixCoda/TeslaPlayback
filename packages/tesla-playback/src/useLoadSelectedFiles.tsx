@@ -31,7 +31,10 @@ export function useLoadSelectedFiles(setEventGroup: ReactSet<PlaybackEventGroup>
 
       const playbackTimestamp = findTimestamp(file.name);
       const splitDirectories = file.webkitRelativePath.split("/");
-      const eventTimestamp = findTimestamp(splitDirectories[splitDirectories.length - 2]);
+      const eventTimestamp =
+        findTimestamp(splitDirectories[splitDirectories.length - 2]) ||
+        // for RecentClips, files are not grouped with folders
+        findTimestamp(splitDirectories[splitDirectories.length - 1]);
       if (!playbackTimestamp || !eventTimestamp) {
         console.warn(`"${file.name}" is unrecognizable: "${file.webkitRelativePath}"`);
         continue;
