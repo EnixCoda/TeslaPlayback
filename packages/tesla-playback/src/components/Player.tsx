@@ -43,6 +43,7 @@ export function Player({ videos, playSibling }: { videos: VideoGroup; playSiblin
   );
 
   const [convertProgress, setConvertProgress] = useState(0);
+  const shouldRestore = React.useRef(false);
 
   return (
     <Box display="flex" flexDirection="column" border="1px solid transparent" borderColor={"canvas.default"} sx={{ gap: 4 }}>
@@ -56,9 +57,19 @@ export function Player({ videos, playSibling }: { videos: VideoGroup; playSiblin
         <ProgressBar
           native={{ style: { flex: 1 } }}
           value={progressBarValue}
+          onDragStart={() => {
+            if (isPlaying) {
+              setIsPlaying(false);
+            }
+            shouldRestore.current = isPlaying;
+          }}
+          onDragEnd={() => {
+            if (shouldRestore.current) {
+              setIsPlaying(true);
+            }
+          }}
           onChange={(progress) => {
             // on dragging the progress bar dot
-            if (isPlaying) setIsPlaying(false);
             setProgressBarValue(progress); // Update in time for smoother dragging
             setControlledProgress(progress);
           }}
