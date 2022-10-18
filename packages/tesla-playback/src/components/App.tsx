@@ -53,13 +53,8 @@ export function App() {
             </Heading>
             <Header.Item full />
             <Header.Item>
-              Made
-              By
-              &nbsp;
-              <Header.Link
-                target="_blank"
-                href="https://github.com/EnixCoda"
-              >
+              Made By &nbsp;
+              <Header.Link target="_blank" href="https://github.com/EnixCoda">
                 EnixCoda
               </Header.Link>
             </Header.Item>
@@ -80,6 +75,7 @@ export function App() {
                         Events <CounterLabel>{allEventTimestampsOrdered.length}</CounterLabel>
                       </Heading>
                       <TimestampSelect
+                        sx={{ maxHeight: 600, overflowY: "auto" }}
                         options={allEventTimestampsOrdered}
                         value={currentEventTimestamp}
                         onChange={(timestamp) => {
@@ -92,7 +88,12 @@ export function App() {
                       <Heading as={"h2"} sx={{ fontSize: 2 }}>
                         Clips <CounterLabel>{currentEventTimestamps.length}</CounterLabel>
                       </Heading>
-                      <TimestampSelect options={currentEventTimestamps} value={currentClipsTimestamp} onChange={setCurrentClipsTimestamp} />
+                      <TimestampSelect
+                        sx={{ maxHeight: 600 }}
+                        options={currentEventTimestamps}
+                        value={currentClipsTimestamp}
+                        onChange={setCurrentClipsTimestamp}
+                      />
                     </section>
                   </Box>
                 </Box>
