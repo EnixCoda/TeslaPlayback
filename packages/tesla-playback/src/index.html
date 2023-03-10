@@ -26,9 +26,11 @@
   <div id="app">
     <noscript>Please enable JavaScript to continue.</noscript>
   </div>
-  <script>
+  <!-- Adding the `type="module"` preserves the script in prod bundle -->
+  <script type="module">
     window.global = window;
     var parcelRequire;
+    window.parcelRequire = parcelRequire;
   </script>
   <script type="module" src="./index.tsx"></script>
 </body>
