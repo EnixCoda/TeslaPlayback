@@ -1,11 +1,11 @@
 import { BaseStyles, Box, CounterLabel, Header, Heading, ThemeProvider } from "@primer/react";
 import { useEffect, useMemo, useState } from "react";
-import { ClipCategorizedEvents, PlaybackEventGroup } from "../common";
 import { TeslaFS } from "../TeslaFS";
-import { useCurrentEventClips } from "../useCurrentClipTimestamp";
-import { useCurrentEvent } from "../useCurrentEvent";
-import { useLoadSelectedFiles } from "../useLoadSelectedFiles";
-import { usePlaySibling } from "../usePlaySibling";
+import { ClipCategorizedEvents, PlaybackEventGroup } from "../common";
+import { useCurrentEventClips } from "../hooks/useCurrentClipTimestamp";
+import { useCurrentEvent } from "../hooks/useCurrentEvent";
+import { useLoadSelectedFiles } from "../hooks/useLoadSelectedFiles";
+import { usePlaySibling } from "../hooks/usePlaySibling";
 import { getSortedKeys } from "../utils/general";
 import { LoadFilesButton } from "./LoadFilesButton";
 import { Player } from "./Player";

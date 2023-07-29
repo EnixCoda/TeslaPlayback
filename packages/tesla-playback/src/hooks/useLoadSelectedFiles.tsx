@@ -1,6 +1,6 @@
 import * as React from "react";
-import { ClipCategorizedEvents, Directions, PlaybackEventGroup } from "./common";
-import { TeslaFS } from "./TeslaFS";
+import { TeslaFS } from "../TeslaFS";
+import { ClipCategorizedEvents, Directions, PlaybackEventGroup } from "../common";
 
 const suffixToDirectionMap: Record<ValueOf<typeof TeslaFS.SUFFIXES>, Directions> = {
   [TeslaFS.SUFFIXES.FRONT]: "front",

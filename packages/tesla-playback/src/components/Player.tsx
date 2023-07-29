@@ -3,7 +3,7 @@ import { Box, Button, Checkbox, FormControl, IconButton, ProgressBar as PrimerPr
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { VideoGroup } from "../common";
-import { LayoutKey, layoutKeys, useVideosLayout } from "../useVideosLayout";
+import { LayoutKey, layoutKeys, useVideosLayout } from "../hooks/useVideosLayout";
 import { mergeVideos } from "../utils/exportVideo";
 import { downloadBlob, formatHMS } from "../utils/general";
 import { DropdownSelect } from "./DropdownSelect";
