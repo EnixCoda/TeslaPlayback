@@ -2,23 +2,6 @@ import type { ProgressCallback } from "@ffmpeg/ffmpeg";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
 import { readFileAsArrayBuffer } from "./general";
 
-// import ffmpegWASM from "../../../ffmpeg-core/dist/ffmpeg-core.wasm";
-// console.log(ffmpegWASM);
-
-// const { createFFmpegCore } = require("../../../ffmpeg-core/dist/ffmpeg-core.js");
-// console.log(createFFmpegCore);
-
-
-// setTimeout(() => {
-//   debugger;
-
-//   const ffmpeg = createFFmpeg({
-//     // corePath: `https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js`,
-//     log: true,
-//   });
-//   ffmpeg.load();
-// }, 1000);
-
 const filenames = {
   front: "input_front.mp4",
   back: "input_back.mp4",
