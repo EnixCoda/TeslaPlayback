@@ -1,4 +1,4 @@
-import type { ProgressEventCallback } from "@ffmpeg/ffmpeg/dist/esm/types";
+import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
 import fontArial from "../assets/fonts/Arial.ttf?url";
 import { loadFFMpeg } from "./ffmpeg.entry";
@@ -68,7 +68,6 @@ const rawArgs = {
     filenames.input,
     `-vf`,
     `drawtext=fontfile=${filenames.font}:text=\'hello\':box=1:fontsize=48:fontcolor=white:boxcolor=black`,
-    `-threads`,
     filenames.output,
   ],
   addTimestamp: (baseTime: string) => [
@@ -80,11 +79,11 @@ const rawArgs = {
   ],
 };
 
-export const mergeVideos = async (frontFile: File, backFile: File, onProgress?: ProgressEventCallback) => {
+type VideoProcessor<Args extends any[]> = (ffmpegHook: (ffmpeg: FFmpeg) => void, ...args: Args) => ReturnType<FFmpeg["readFile"]>;
+
+export const mergeVideos: VideoProcessor<[frontFile: File, backFile: File]> = async (ffmpegHook, frontFile, backFile) => {
   const ffmpeg = await loadFFMpeg();
-  ffmpeg.on("progress", (progress) => {
-    onProgress?.(progress);
-  });
+  ffmpegHook(ffmpeg);
   await ffmpeg.writeFile(filenames.front, new Uint8Array(await readFileAsArrayBuffer(frontFile)));
   await ffmpeg.writeFile(filenames.back, new Uint8Array(await readFileAsArrayBuffer(backFile)));
   const args = rawArgs.vstack
@@ -96,11 +95,9 @@ export const mergeVideos = async (frontFile: File, backFile: File, onProgress?: 
   return outputFile;
 };
 
-export const drawTextToVideo = async (originalFile: File, onProgress?: ProgressEventCallback) => {
+export const drawTextToVideo: VideoProcessor<[originalFile: File]> = async (ffmpegHook, originalFile) => {
   const ffmpeg = await loadFFMpeg();
-  ffmpeg.on("progress", (progress) => {
-    onProgress?.(progress);
-  });
+  ffmpegHook(ffmpeg);
   await ffmpeg.writeFile(filenames.input, new Uint8Array(await readFileAsArrayBuffer(originalFile)));
   await ffmpeg.writeFile(filenames.font, await loadFontFile());
   const args = rawArgs.drawText;
@@ -109,15 +106,13 @@ export const drawTextToVideo = async (originalFile: File, onProgress?: ProgressE
   return outputFile;
 };
 
-export const addTimestampToVideo = async (originalFile: File, baseTime: Date, onProgress?: ProgressEventCallback) => {
+export const addTimestampToVideo: VideoProcessor<[originalFile: File, baseTime: Date]> = async (ffmpegHook, originalFile, baseTime) => {
   const ffmpeg = await loadFFMpeg();
-  ffmpeg.on("progress", (progress) => {
-    onProgress?.(progress);
-  });
+  ffmpegHook(ffmpeg);
   await ffmpeg.writeFile(filenames.input, new Uint8Array(await readFileAsArrayBuffer(originalFile)));
   await ffmpeg.writeFile(filenames.font, await loadFontFile());
   const args = rawArgs
-    .addTimestamp(baseTime + "000")
+    .addTimestamp(+baseTime + "000")
     .map((line) => line.trim())
     .filter(Boolean);
   await ffmpeg.exec(args);

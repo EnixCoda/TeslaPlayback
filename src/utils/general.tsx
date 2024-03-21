@@ -16,18 +16,6 @@ export function run<R>(fn: () => R) {
   return fn();
 }
 
-interface Pipe {
-  (): void;
-  <Args extends any[], R>(fn0: (...args: Args) => R): (...args: Args) => R;
-  <Args extends any[], R0, R1>(fn0: (...args: Args) => R0, fn1: (...args: [R0]) => R1): (...args: Args) => R1;
-  <Args extends any[], R0, R1, R2>(fn0: (...args: Args) => R0, fn1: (...args: [R0]) => R1, fn2: (...args: [R1]) => R2): (...args: Args) => R2;
-}
-
-export const pipe: Pipe =
-  (...fns: any[]) =>
-  (...args: any[]) =>
-    args.reduce((acc, fn) => fn(acc), fns[0](...args));
-
 export function getSortedKeys<T extends string, V>(eventGroup: {
   [key in T]: V;
 }): T[] {
@@ -44,11 +32,12 @@ export const downloadURL = (data: string, fileName: string) => {
   a.remove();
 };
 
-export const downloadBlob = (data: Uint8Array, fileName: string, mimeType: string) => {
-  const blob = new Blob([data], {
+export const getBlob = (data: Uint8Array, mimeType: string): Blob =>
+  new Blob([data], {
     type: mimeType,
   });
 
+export const downloadBlob = (blob: Blob, fileName: string) => {
   const url = window.URL.createObjectURL(blob);
 
   downloadURL(url, fileName);
