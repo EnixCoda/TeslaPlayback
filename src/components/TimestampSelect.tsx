@@ -1,7 +1,6 @@
 import { NavList } from "@primer/react";
 import { ComponentProps } from "react";
 import { TeslaFS } from "../TeslaFS";
-import { formatTimestamp } from "../utils/general";
 
 export function TimestampSelect({
   options,
@@ -17,7 +16,7 @@ export function TimestampSelect({
     <NavList {...rest}>
       {options.map((option) => (
         <NavList.Item key={option} aria-current={value === option} onClick={() => onChange(option)}>
-          {formatTimestamp(option)}
+          {TeslaFS.formatTimestamp(option)}
         </NavList.Item>
       ))}
     </NavList>

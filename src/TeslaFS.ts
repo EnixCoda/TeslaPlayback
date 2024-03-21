@@ -9,6 +9,11 @@ export namespace TeslaFS {
   export const clipScopes = ["RecentClips", "SavedClips", "SentryClips"] as const;
   export type ClipScope = ValueOfArray<typeof clipScopes>;
 
+  export function formatTimestamp(timestamp: TeslaFS.Timestamp) {
+    const [date, time] = timestamp.split("_").map((part) => part.split("-"));
+    return [date.join("-"), time.join(":")].join(" ");
+  }
+
   export const parseFileNameDate = (fileName: string) => {
     const matched = fileName.match(/(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
     assert(matched, `Invalid filename name: ${fileName}`);

@@ -1,10 +1,3 @@
-import { TeslaFS } from "../TeslaFS";
-
-export function formatTimestamp(timestamp: TeslaFS.Timestamp) {
-  const [date, time] = timestamp.split("_").map((part) => part.split("-"));
-  return [date.join("-"), time.join(":")].join(" ");
-}
-
 export function formatHMS(seconds: number, forceRender: "h" | "m" = "m") {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
