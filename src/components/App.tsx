@@ -62,7 +62,14 @@ export function App() {
           <Box display="flex" flexDirection={["column", "column", "row"]} sx={{ gap: 1 }} m={3} pb={2} overflow="auto">
             <Box as="section" display="flex" flexDirection="column" sx={{ flexShrink: 0, flexGrow: 0, gap: 3 }}>
               <Box>
-                <LoadFilesButton onLoad={loadSelectedFiles} />
+                <LoadFilesButton
+                  onLoad={loadSelectedFiles}
+                  selectDir
+                  inputProps={{
+                    multiple: true,
+                    accept: "video/mp4,video/x-m4v,video/*",
+                  }}
+                />
               </Box>
               {allEventTimestampsOrdered.length > 0 ? (
                 <Box as="nav" display="flex" flexDirection="column" width={380} sx={{ gap: 2 }}>
