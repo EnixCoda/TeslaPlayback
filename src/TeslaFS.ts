@@ -1,3 +1,5 @@
+import { assert } from "./utils/assert";
+
 export namespace TeslaFS {
   export type Timestamp =
     | string
@@ -6,6 +8,13 @@ export namespace TeslaFS {
 
   export const clipScopes = ["RecentClips", "SavedClips", "SentryClips"] as const;
   export type ClipScope = ValueOfArray<typeof clipScopes>;
+
+  export const parseFileNameDate = (fileName: string) => {
+    const matched = fileName.match(/(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
+    assert(matched, `Invalid filename name: ${fileName}`);
+    const [, YYYY, mm, DD, HH, MM, SS] = matched;
+    return new Date(`${YYYY}-${mm}-${DD}T${HH}:${MM}:${SS}`);
+  };
 
   export const SUFFIXES = {
     FRONT: "front",

@@ -2,16 +2,17 @@ import { ChevronLeftIcon, ChevronRightIcon, ColumnsIcon, PlayIcon, StopwatchIcon
 import { Box, Button, Checkbox, FormControl, IconButton, ProgressBar as PrimerProgressBar, Text } from "@primer/react";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { TeslaFS } from "../TeslaFS";
 import { VideoGroup } from "../common";
 import { LayoutKey, layoutKeys, useVideosLayout } from "../hooks/useVideosLayout";
-import { mergeVideos } from "../utils/exportVideo";
+import { addTimestampToVideo, drawTextToVideo, mergeVideos } from "../utils/exportVideo";
 import { downloadBlob, formatHMS } from "../utils/general";
 import { DropdownSelect } from "./DropdownSelect";
 import { LayoutComposer } from "./LayoutComposer";
 import { ProgressBar } from "./ProgressBar";
 import { Video } from "./Video";
 
-const enableExport = process.env.ENABLE_EXPORT === "true" && window.isSecureContext;
+const enableExport = window.isSecureContext;
 
 export function Player({ videos, playSibling }: { videos: VideoGroup; playSibling?: (offset: 1 | -1) => void }) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
@@ -110,12 +111,34 @@ export function Player({ videos, playSibling }: { videos: VideoGroup; playSiblin
           <Button
             onClick={async () => {
               if (videos.front && videos.back) {
-                const outputFile = await mergeVideos(videos.front, videos.back, (p) => setConvertProgress(p.ratio));
-                downloadBlob(outputFile, "output.mp4", 'video/mp4; codecs="mp4s"');
+                const outputFile = await mergeVideos(videos.front, videos.back, (p) => setConvertProgress(p.progress));
+                typeof outputFile === "string" ? console.log({ outputFile }) : downloadBlob(outputFile, "output.mp4", 'video/mp4; codecs="mp4s"');
               }
             }}
           >
-            Export
+            Merge & Export
+          </Button>
+          <Button
+            onClick={async () => {
+              if (videos.front) {
+                const outputFile = await addTimestampToVideo(videos.front, TeslaFS.parseFileNameDate(videos.front.name), (p) =>
+                  setConvertProgress(p.progress)
+                );
+                typeof outputFile === "string" ? console.log({ outputFile }) : downloadBlob(outputFile, "output.mp4", 'video/mp4; codecs="mp4s"');
+              }
+            }}
+          >
+            Timestamp & Export
+          </Button>
+          <Button
+            onClick={async () => {
+              if (videos.front) {
+                const outputFile = await drawTextToVideo(videos.front, (p) => setConvertProgress(p.progress));
+                typeof outputFile === "string" ? console.log({ outputFile }) : downloadBlob(outputFile, "output.mp4", 'video/mp4; codecs="mp4s"');
+              }
+            }}
+          >
+            Draw Text & Export
           </Button>
           <PrimerProgressBar progress={convertProgress * 100} />
         </>
