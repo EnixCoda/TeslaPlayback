@@ -2,7 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon, ColumnsIcon, PlayIcon, StopwatchIcon
 import { Box, Checkbox, FormControl, IconButton, Text } from "@primer/react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { VideoGroup } from "../common";
+import { VideoClipGroup } from "../common";
 import { LayoutKey, layoutKeys, useVideosLayout } from "../hooks/useVideosLayout";
 import { formatHMS } from "../utils/general";
 import { DropdownSelect } from "./DropdownSelect";
@@ -13,7 +13,7 @@ import { VideoExporter } from "./VideoExporter";
 
 const enableExport = window.isSecureContext;
 
-export function Player({ videos, playSibling }: { videos: VideoGroup; playSibling?: (offset: 1 | -1) => void }) {
+export function Player({ videos, playSibling }: { videos: VideoClipGroup; playSibling?: (offset: 1 | -1) => void }) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isAutoPlay, setIsAutoPlay] = useState<boolean>(isPlaying); // should equal on initial
   const [playbackRate, setPlaybackRate] = useState<number>(1);

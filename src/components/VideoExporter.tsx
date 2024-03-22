@@ -2,11 +2,11 @@ import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { Box, Button, ProgressBar as PrimerProgressBar, Text } from "@primer/react";
 import { useState } from "react";
 import { TeslaFS } from "../TeslaFS";
-import { VideoGroup } from "../common";
+import { VideoClipGroup } from "../common";
 import { addTimestampToVideo, drawTextToVideo, mergeVideos } from "../utils/exportVideo";
 import { downloadBlob, getBlob, run } from "../utils/general";
 
-export function VideoExporter({ videos }: { videos: VideoGroup }) {
+export function VideoExporter({ videos }: { videos: VideoClipGroup }) {
   type ExportStateIdle = {
     state: "idle";
   };

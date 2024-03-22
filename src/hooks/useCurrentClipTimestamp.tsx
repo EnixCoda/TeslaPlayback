@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { TeslaFS } from "../TeslaFS";
-import { PlaybackEvent, VideoGroup } from "../common";
+import { PlaybackEvent, VideoClipGroup } from "../common";
 import { getSortedKeys } from "../utils/general";
 
 export function useCurrentEventClips(currentEvent: PlaybackEvent | null) {
@@ -14,7 +14,7 @@ export function useCurrentEventClips(currentEvent: PlaybackEvent | null) {
     }
   }, [currentEventTimestamps]);
 
-  const currentClips: VideoGroup | null = useMemo(
+  const currentClips: VideoClipGroup | null = useMemo(
     () => (currentClipsTimestamp && currentEvent && currentEvent[currentClipsTimestamp]) || null,
     [currentClipsTimestamp, currentEvent]
   );
