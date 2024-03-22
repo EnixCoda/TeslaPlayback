@@ -1,5 +1,14 @@
 /// <reference lib="react" />
 
+type Option<T> = { id: string; value: T };
+
+type IO<T> = {
+  value: T;
+  onChange: (value: T) => void;
+};
+
+type NonConflictJoin<Target, Source> = Target & Omit<Source, keyof Target>;
+
 type ReactSet<T> = React.Dispatch<React.SetStateAction<T>>;
 
 type ValueOf<T> = T[keyof T];

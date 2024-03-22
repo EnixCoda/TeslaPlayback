@@ -1,22 +1,24 @@
-import { NavList } from "@primer/react";
-import { ComponentProps } from "react";
+import { NavList, NavListProps } from "@primer/react";
 import { TeslaFS } from "../TeslaFS";
+import { CommonSelectProps } from "./Select";
 
 export function TimestampSelect({
   options,
   value,
   onChange,
+  renderOption = (option) => TeslaFS.formatTimestamp(option),
   ...rest
-}: {
-  options: TeslaFS.Timestamp[];
-  value: TeslaFS.Timestamp | null;
-  onChange: ReactSet<TeslaFS.Timestamp | null>;
-} & Pick<ComponentProps<typeof NavList>, "sx">) {
+}: Omit<NonConflictJoin<CommonSelectProps<TeslaFS.Timestamp>, NavListProps>, "children">) {
   return (
     <NavList {...rest}>
       {options.map((option) => (
-        <NavList.Item key={option} aria-current={value === option} onClick={() => onChange(option)}>
-          {TeslaFS.formatTimestamp(option)}
+        <NavList.Item
+          key={option}
+          aria-current={value === option}
+          onClick={() => onChange(option)}
+          sx={{ whiteSpace: "nowrap", fontFamily: "monospace" }}
+        >
+          {renderOption(option)}
         </NavList.Item>
       ))}
     </NavList>

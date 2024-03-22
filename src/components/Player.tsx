@@ -45,64 +45,70 @@ export function Player({ videos, playSibling }: { videos: VideoClipGroup; playSi
   const shouldRestore = React.useRef(false);
 
   return (
-    <Box display="flex" flexDirection="column" border="1px solid transparent" borderColor={"canvas.default"} sx={{ gap: 4 }}>
-      <Box display="flex" alignItems="center" sx={{ gap: 1 }}>
-        <IconButton onClick={() => playSiblingAndUpdateControl(-1)} icon={ChevronLeftIcon} />
-        <IconButton onClick={() => setIsPlaying(!isPlaying)} icon={isPlaying ? ColumnsIcon : PlayIcon} />
-        <IconButton onClick={() => playSiblingAndUpdateControl(1)} icon={ChevronRightIcon} />
-        <Text sx={{ fontFamily: "monospace" }}>
-          {formatHMS(playtime)}/{formatHMS(duration)}
-        </Text>
-        <ProgressBar
-          native={{ style: { flex: 1 } }}
-          value={progressBarValue}
-          onDragStart={() => {
-            if (isPlaying) {
-              setIsPlaying(false);
+    <Box display="inline-flex" flexDirection="column" border="1px solid transparent" borderColor={"canvas.default"} sx={{ gap: 4 }}>
+      <Box display="inline-flex" alignItems="center" sx={{ gap: 1, "> *": { flexShrink: 0 } }} flexWrap="wrap">
+        <Box display="inline-flex" alignItems="center" sx={{ gap: 1 }}>
+          <IconButton aria-label={"Previous"} onClick={() => playSiblingAndUpdateControl(-1)} icon={ChevronLeftIcon} />
+          <IconButton aria-label={isPlaying ? "Pause" : "Play"} onClick={() => setIsPlaying(!isPlaying)} icon={isPlaying ? ColumnsIcon : PlayIcon} />
+          <IconButton aria-label={"Next"} onClick={() => playSiblingAndUpdateControl(1)} icon={ChevronRightIcon} />
+        </Box>
+        <Box display="inline-flex" alignItems="center" sx={{ gap: 1 }}>
+          <Text sx={{ fontFamily: "monospace" }}>
+            {formatHMS(playtime)}/{formatHMS(duration)}
+          </Text>
+          <ProgressBar
+            native={{ style: { flex: 1 } }}
+            value={progressBarValue}
+            onDragStart={() => {
+              if (isPlaying) {
+                setIsPlaying(false);
+              }
+              shouldRestore.current = isPlaying;
+            }}
+            onDragEnd={() => {
+              if (shouldRestore.current) {
+                setIsPlaying(true);
+              }
+            }}
+            onChange={(progress) => {
+              // on dragging the progress bar dot
+              setProgressBarValue(progress); // Update in time for smoother dragging
+              setControlledProgress(progress);
+            }}
+          />
+        </Box>
+        <Box display="inline-flex" alignItems="center" sx={{ gap: 1 }}>
+          <DropdownSelect
+            title={
+              <>
+                <StopwatchIcon /> {`x${playbackRate}`}
+              </>
             }
-            shouldRestore.current = isPlaying;
-          }}
-          onDragEnd={() => {
-            if (shouldRestore.current) {
-              setIsPlaying(true);
+            options={[0.25, 0.5, 1, 2, 4, 8].map((rate) => ({
+              value: `${rate}`,
+              label: `${rate}`,
+            }))}
+            value={`${playbackRate}`}
+            onChange={(value) => setPlaybackRate(parseFloat(value))}
+          />
+          <DropdownSelect
+            title={
+              <>
+                <VersionsIcon /> {layoutKey}
+              </>
             }
-          }}
-          onChange={(progress) => {
-            // on dragging the progress bar dot
-            setProgressBarValue(progress); // Update in time for smoother dragging
-            setControlledProgress(progress);
-          }}
-        />
-        <DropdownSelect
-          title={
-            <>
-              <StopwatchIcon /> {`x${playbackRate}`}
-            </>
-          }
-          options={[0.25, 0.5, 1, 2, 4, 8].map((rate) => ({
-            value: `${rate}`,
-            label: `${rate}`,
-          }))}
-          value={`${playbackRate}`}
-          onChange={(value) => setPlaybackRate(parseFloat(value))}
-        />
-        <DropdownSelect
-          title={
-            <>
-              <VersionsIcon /> {layoutKey}
-            </>
-          }
-          options={layoutKeys.map((key) => ({
-            value: key,
-            label: key,
-          }))}
-          value={layoutKey}
-          onChange={setLayoutKey}
-        />
-        <FormControl sx={{ alignItems: "center" }}>
-          <Checkbox checked={isAutoPlay} onChange={() => setIsAutoPlay(!isAutoPlay)} />
-          <FormControl.Label sx={{ whiteSpace: "nowrap" }}>Auto Play</FormControl.Label>
-        </FormControl>
+            options={layoutKeys.map((key) => ({
+              value: key,
+              label: key,
+            }))}
+            value={layoutKey}
+            onChange={setLayoutKey}
+          />
+          <FormControl sx={{ alignItems: "center" }}>
+            <Checkbox checked={isAutoPlay} onChange={() => setIsAutoPlay(!isAutoPlay)} />
+            <FormControl.Label sx={{ whiteSpace: "nowrap" }}>Auto Play</FormControl.Label>
+          </FormControl>
+        </Box>
       </Box>
       {enableExport && <VideoExporter videos={videos} />}
       <Box bg="neutral.muted" borderWidth={1} borderStyle="solid" borderColor="border.default" borderRadius={4}>
