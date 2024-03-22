@@ -69,7 +69,9 @@ export function App() {
                     multiple: true,
                     accept: "video/mp4,video/x-m4v,video/*",
                   }}
-                />
+                >
+                  Load DashCam Files
+                </LoadFilesButton>
               </Box>
               {allEventTimestampsOrdered.length > 0 ? (
                 <Box as="nav" display="flex" flexDirection="column" width={380} sx={{ gap: 2 }}>
@@ -105,7 +107,7 @@ export function App() {
                   </Box>
                 </Box>
               ) : (
-                <Box width={640}>
+                <Box maxWidth={640}>
                   <UsageGuide />
                 </Box>
               )}

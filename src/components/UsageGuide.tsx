@@ -7,18 +7,19 @@ export function UsageGuide() {
         How to use
       </Heading>
       <ol>
-        <li>Please access with Safari or Firefox, videos may not play on Chrome and Edge.</li>
-        <li>Unplug the USB drive from your Tesla and insert it to computer</li>
-        <li>Click the "Load files" button above</li>
+        <li>Disconnect the USB drive from your Tesla and connect it to your computer.</li>
+        <li>Initiate the process by clicking the "Load files" button.</li>
         <li>
-          Select the drive or its root directory, whose name should be <em>TeslaCam</em>, <em>RecentClips</em>, <em>SavedClips</em>, or <em>SentryClips</em>.
+          Navigate to and select the USB drive or its root folder, which contains <em>TeslaCam</em>, <em>RecentClips</em>, <em>SavedClips</em>, or{" "}
+          <em>SentryClips</em>.
           <p>
-            Note: Your browser may warn you that files are going to be uploaded. In fact, no files would be uploaded at all. You can disconnect
-            network before selecting files and continue use offline to ensure of that.
+            Important: If your browser prompts a warning about file uploads, don't worry, no files will be uploaded. For added security, feel free to
+            disconnect from internet before you proceed.
           </p>
         </li>
-        <li>Videos should start playing if you chose the proper directory. If not, please retry using Safari or Firefox.</li>
+        <li>Upon selecting the correct folder, your Tesla's video files will automatically begin playback.</li>
       </ol>
+      <p>Note: This web app is for 🖥️ 💻 computer usages (Windows/macOS/Linux). It might not work on phone or tablet.</p>
     </section>
   );
 }

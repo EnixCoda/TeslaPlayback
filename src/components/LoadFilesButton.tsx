@@ -1,20 +1,21 @@
 import { Button } from "@primer/react";
-import { useRef } from "react";
+import { PropsWithChildren, useRef } from "react";
 
 export function LoadFilesButton({
   onLoad,
   selectDir,
   inputProps,
-}: {
+  children,
+}: PropsWithChildren<{
   onLoad: (files: FileList | null) => void;
   selectDir?: boolean;
   inputProps?: Partial<React.InputHTMLAttributes<HTMLInputElement>>;
-}) {
+}>) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   return (
     <>
       <Button variant={"primary"} onClick={() => inputRef.current?.click()}>
-        Load files
+        {children}
       </Button>
       <input
         hidden
