@@ -7,8 +7,8 @@ import { useCurrentEvent } from "../hooks/useCurrentEvent";
 import { useDashCamEvents } from "../hooks/useDashCamEvents";
 import { usePlaySibling } from "../hooks/usePlaySibling";
 import { getSortedKeys } from "../utils/general";
+import { MatrixPlayer } from "./MatrixPlayer";
 import { ParserLogViewer } from "./ParserLogViewer";
-import { Player } from "./Player";
 import { Select } from "./Select";
 import { SubNavs } from "./SubNavs";
 import { TimestampSelect } from "./TimestampSelect";
@@ -52,7 +52,7 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
       <Box display="flex" flexDirection={["column", "column", "row"]} sx={{ gap: 1 }} overflow="auto">
         <Box as="nav" display="inline-flex" flexDirection="column" sx={{ gap: 2 }}>
           {availableScopes.length > 0 && <SubNavs options={availableScopes} value={focusedScope} onChange={(scope) => setFocusedScope(scope)} />}
-          <Box display={["none", "flex", "flex"]} flexWrap={["wrap", "nowrap", "nowrap"]} sx={{ gap: 1 }}>
+          <Box display={["none", "none", "flex"]} flexWrap={["wrap", "nowrap", "nowrap"]} sx={{ gap: 1 }}>
             <FormControl>
               <FormControl.Label>
                 Events <CounterLabel>{allEventTimestampsOrdered.length}</CounterLabel>
@@ -82,7 +82,7 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
               />
             </FormControl>
           </Box>
-          <Box display={["flex", "none", "none"]} flexWrap={["wrap", "nowrap", "nowrap"]} sx={{ gap: 1 }}>
+          <Box display={["flex", "flex", "none"]} flexWrap={["wrap", "nowrap", "nowrap"]} sx={{ gap: 1 }}>
             <FormControl>
               <FormControl.Label>
                 Events <CounterLabel>{allEventTimestampsOrdered.length}</CounterLabel>
@@ -105,7 +105,7 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
             </FormControl>
           </Box>
         </Box>
-        <Box as="main">{currentClips && <Player playSibling={playSibling} videos={currentClips} />}</Box>
+        <Box as="main">{currentClips && <MatrixPlayer playSibling={playSibling} videos={currentClips} />}</Box>
       </Box>
     </>
   );

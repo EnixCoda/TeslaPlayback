@@ -13,7 +13,7 @@ import { VideoExporter } from "./VideoExporter";
 
 const enableExport = window.isSecureContext;
 
-export function Player({ videos, playSibling }: { videos: VideoClipGroup; playSibling?: (offset: 1 | -1) => void }) {
+export function MatrixPlayer({ videos, playSibling }: { videos: VideoClipGroup; playSibling?: (offset: 1 | -1) => void }) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isAutoPlay, setIsAutoPlay] = useState<boolean>(isPlaying); // should equal on initial
   const [playbackRate, setPlaybackRate] = useState<number>(1);
@@ -110,7 +110,6 @@ export function Player({ videos, playSibling }: { videos: VideoClipGroup; playSi
           </FormControl>
         </Box>
       </Box>
-      {enableExport && <VideoExporter videos={videos} />}
       <Box bg="neutral.muted" borderWidth={1} borderStyle="solid" borderColor="border.default" borderRadius={4}>
         <LayoutComposer
           style={layout.container}
@@ -196,6 +195,7 @@ export function Player({ videos, playSibling }: { videos: VideoClipGroup; playSi
           </div>
         </LayoutComposer>
       </Box>
+      {enableExport && <VideoExporter videos={videos} />}
     </Box>
   );
 }

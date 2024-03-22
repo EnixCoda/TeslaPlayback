@@ -7,6 +7,19 @@ import { UsageGuide } from "./UsageGuide";
 export function App() {
   const [fileList, setFileList] = useState<FileList | null>(null);
 
+  const loadFilesButton = (
+    <LoadFilesButton
+      onLoad={setFileList}
+      selectDir
+      inputProps={{
+        multiple: true,
+        accept: "video/mp4,video/x-m4v,video/*",
+      }}
+    >
+      Load DashCam Files
+    </LoadFilesButton>
+  );
+
   return (
     <ThemeProvider colorMode="auto">
       <BaseStyles>
@@ -24,22 +37,15 @@ export function App() {
             </Header.Item>
           </Header>
           <Box as="section" display="inline-flex" flexDirection="column" padding={3} overflow="auto" sx={{ gap: 3 }}>
-            <Box>
-              <LoadFilesButton
-                onLoad={setFileList}
-                selectDir
-                inputProps={{
-                  multiple: true,
-                  accept: "video/mp4,video/x-m4v,video/*",
-                }}
-              >
-                Load DashCam Files
-              </LoadFilesButton>
-            </Box>
             {fileList && fileList.length > 0 ? (
-              <DashCamBrowser fileList={fileList} />
+              <>
+                <Box>{loadFilesButton}</Box>
+                <DashCamBrowser fileList={fileList} />
+              </>
             ) : (
-              <Box maxWidth={640}>
+              <Box display="inline-flex" flexDirection="column" maxWidth={640} sx={{ gap: 2 }}>
+                <Text>Browse, view, and export your Tesla DashCam videos for free.</Text>
+                <Box>{loadFilesButton}</Box>
                 <UsageGuide />
               </Box>
             )}
