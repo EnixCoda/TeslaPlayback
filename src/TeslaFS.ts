@@ -1,5 +1,6 @@
 import { assert } from "./utils/assert";
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace TeslaFS {
   export type Timestamp =
     | string
@@ -12,6 +13,11 @@ export namespace TeslaFS {
   export function formatTimestamp(timestamp: TeslaFS.Timestamp) {
     const [date, time] = timestamp.split("_").map((part) => part.split("-"));
     return [date.join("-"), time.join(":")].join(" ");
+  }
+
+  export function parseTimestamp(timestamp: TeslaFS.Timestamp) {
+    const [date, time] = timestamp.split("_").map((part) => part.split("-"));
+    return new Date(`${date.join("-")}T${time.join(":")}`);
   }
 
   export const parseFileNameDate = (fileName: string) => {

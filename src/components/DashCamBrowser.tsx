@@ -106,7 +106,13 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
           </Box>
         </Box>
         <Box as="main" flex="1">
-          {currentClips && <MatrixPlayer playSibling={playSibling} videos={currentClips} />}
+          {currentClips && (
+            <MatrixPlayer
+              baseTime={currentClipsTimestamp ? TeslaFS.parseTimestamp(currentClipsTimestamp) : new Date()}
+              playSibling={playSibling}
+              videos={currentClips}
+            />
+          )}
         </Box>
       </Box>
     </>

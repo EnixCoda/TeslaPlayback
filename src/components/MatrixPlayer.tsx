@@ -4,7 +4,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Directions, VideoClipGroup } from "../common";
 import { LayoutKey, layoutKeys, useVideosLayout } from "../hooks/useVideosLayout";
-import { formatHMS } from "../utils/general";
+import { formatDateTime, formatHMS, shiftTime } from "../utils/general";
 import { DropdownSelect } from "./DropdownSelect";
 import { LayoutComposer } from "./LayoutComposer";
 import { ProgressBar } from "./ProgressBar";
@@ -32,7 +32,7 @@ function useVideoControl() {
   };
 }
 
-export function MatrixPlayer({ videos, playSibling }: { videos: VideoClipGroup; playSibling?: (offset: 1 | -1) => void }) {
+export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date; videos: VideoClipGroup; playSibling?: (offset: 1 | -1) => void }) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isAutoPlay, setIsAutoPlay] = useState<boolean>(isPlaying); // should equal on initial
   const [playbackRate, setPlaybackRate] = useState<number>(1);
@@ -185,7 +185,7 @@ export function MatrixPlayer({ videos, playSibling }: { videos: VideoClipGroup; 
           </FormControl>
         </Box>
       </Box>
-      <Box bg="neutral.muted" borderWidth={1} borderStyle="solid" borderColor="border.default" borderRadius={4}>
+      <Box bg="neutral.muted" position="relative" borderWidth={1} borderStyle="solid" borderColor="border.default" borderRadius={4}>
         <LayoutComposer
           style={layout.container}
           decorator={(index, element) =>
@@ -211,6 +211,11 @@ export function MatrixPlayer({ videos, playSibling }: { videos: VideoClipGroup; 
             <Video label={"Right"} ref={controls.right.ref} file={videos.right} {...getVideoProps(controls.right)} />
           </div>
         </LayoutComposer>
+        <Box position="absolute" top="0" left="0" p={0} bg="#000" lineHeight="1">
+          <Text color="#fff" fontFamily="monospace" fontSize="2vw">
+            {formatDateTime(shiftTime(baseTime, playtime))}
+          </Text>
+        </Box>
       </Box>
       {enableExport && <VideoExporter videos={videos} />}
     </Box>

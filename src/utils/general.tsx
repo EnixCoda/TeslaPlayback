@@ -51,3 +51,15 @@ export function readFileAsArrayBuffer(file: File) {
     reader.readAsArrayBuffer(file);
   });
 }
+
+export function formatDateTime(dateTime: Date) {
+  // YYYY-mm-DD HH:MM:SS
+  return dateTime
+    .toISOString()
+    .replace("T", " ")
+    .replace(/\.\d+Z$/, "");
+}
+
+export function shiftTime(time: Date, shift: number) {
+  return new Date(shift * 1000 + time.getTime());
+}
