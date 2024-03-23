@@ -1,6 +1,7 @@
 import { BaseStyles, Box, Header, Heading, Text, ThemeProvider } from "@primer/react";
 import { useState } from "react";
 import { DashCamBrowser } from "./DashCamBrowser";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { LoadFilesButton } from "./LoadFilesButton";
 import { UsageGuide } from "./UsageGuide";
 
@@ -37,18 +38,20 @@ export function App() {
             </Header.Item>
           </Header>
           <Box as="section" display="inline-flex" flexDirection="column" padding={3} overflow="auto" sx={{ gap: 3 }}>
-            {fileList && fileList.length > 0 ? (
-              <>
-                <Box>{loadFilesButton}</Box>
-                <DashCamBrowser fileList={fileList} />
-              </>
-            ) : (
-              <Box display="inline-flex" flexDirection="column" maxWidth={640} sx={{ gap: 2 }}>
-                <Text>Browse, view, and export your Tesla DashCam videos for free.</Text>
-                <Box>{loadFilesButton}</Box>
-                <UsageGuide />
-              </Box>
-            )}
+            <ErrorBoundary>
+              {fileList && fileList.length > 0 ? (
+                <>
+                  <Box>{loadFilesButton}</Box>
+                  <DashCamBrowser fileList={fileList} />
+                </>
+              ) : (
+                <Box display="inline-flex" flexDirection="column" maxWidth={640} sx={{ gap: 2 }}>
+                  <Text>Browse, view, and export your Tesla DashCam videos for free.</Text>
+                  <Box>{loadFilesButton}</Box>
+                  <UsageGuide />
+                </Box>
+              )}
+            </ErrorBoundary>
           </Box>
         </Box>
       </BaseStyles>
