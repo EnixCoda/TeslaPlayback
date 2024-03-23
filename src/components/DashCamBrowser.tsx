@@ -24,12 +24,12 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
   const focusedEventGroup: PlaybackEventGroup = useMemo(() => {
     if (focusedScope === null) return eventGroup;
     return (
-      eventsIndex[focusedScope]?.reduce((eventGroup, timestamp) => {
-        eventGroup[timestamp] = eventGroup[timestamp];
-        return eventGroup;
+      eventsIndex[focusedScope]?.reduce((group, timestamp) => {
+        group[timestamp] = eventGroup[timestamp];
+        return group;
       }, {} as PlaybackEventGroup) ?? eventGroup
     );
-  }, [eventGroup, focusedScope]);
+  }, [eventGroup, focusedScope, eventsIndex]);
   const allEventTimestampsOrdered = useMemo(() => getSortedKeys(focusedEventGroup), [focusedEventGroup]);
   const { currentEvent, currentEventTimestamp, setCurrentEventTimestamp, currentEventTimestamps } = useCurrentEvent(
     allEventTimestampsOrdered,

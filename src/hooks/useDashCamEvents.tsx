@@ -26,6 +26,7 @@ export function useDashCamEvents(files: FileList) {
       const filename = file.name.toLowerCase();
 
       if (filename.startsWith(".")) continue; // ignore hidden files
+      if (["event.json", "thumb.png"].includes(filename)) continue;
       if (!filename.endsWith(TeslaFS.VIDEO_FILE_EXT)) {
         parserLog.push({ file, message: `File name not end with "${TeslaFS.VIDEO_FILE_EXT}"` });
         continue;
