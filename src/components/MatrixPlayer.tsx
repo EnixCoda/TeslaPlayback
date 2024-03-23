@@ -2,16 +2,35 @@ import { ChevronLeftIcon, ChevronRightIcon, ColumnsIcon, PlayIcon, StopwatchIcon
 import { Box, Checkbox, FormControl, IconButton, Text } from "@primer/react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { VideoClipGroup } from "../common";
+import { Directions, VideoClipGroup } from "../common";
 import { LayoutKey, layoutKeys, useVideosLayout } from "../hooks/useVideosLayout";
 import { formatHMS } from "../utils/general";
 import { DropdownSelect } from "./DropdownSelect";
 import { LayoutComposer } from "./LayoutComposer";
 import { ProgressBar } from "./ProgressBar";
-import { Video } from "./Video";
+import { Video, VideoRef } from "./Video";
 import { VideoExporter } from "./VideoExporter";
 
 const enableExport = window.isSecureContext;
+
+function useVideoControl() {
+  const ref = React.useRef<VideoRef | null>(null);
+  const [canPlay, setCanPlay] = useState(false);
+  const [playEnded, setPlayEnded] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [playtime, setPlaytime] = useState(0);
+  return {
+    ref,
+    canPlay,
+    setCanPlay,
+    playEnded,
+    setPlayEnded,
+    duration,
+    setDuration,
+    playtime,
+    setPlaytime,
+  };
+}
 
 export function MatrixPlayer({ videos, playSibling }: { videos: VideoClipGroup; playSibling?: (offset: 1 | -1) => void }) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
@@ -29,23 +48,79 @@ export function MatrixPlayer({ videos, playSibling }: { videos: VideoClipGroup; 
   const [layoutKey, setLayoutKey] = useState<LayoutKey>("1/2/1");
   const layout = useVideosLayout(layoutKey, 3 / 4);
 
-  const [playtime, setPlaytime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const controls: Record<Directions, ReturnType<typeof useVideoControl>> = {
+    front: useVideoControl(),
+    back: useVideoControl(),
+    left: useVideoControl(),
+    right: useVideoControl(),
+  };
 
-  const playSiblingAndUpdateControl = React.useCallback(
-    function playSiblingAndUpdateControl(offset: 1 | -1) {
-      playSibling?.(offset);
-      setPlaytime(0);
+  // start playing on all can play
+  useEffect(() => {
+    if ([controls.front.canPlay, controls.back.canPlay, controls.left.canPlay, controls.right.canPlay].every(Boolean)) {
       setIsPlaying(isAutoPlay);
-      setProgressBarValue(0);
-    },
-    [isAutoPlay, playSibling]
+    }
+  }, [controls.front.canPlay, controls.back.canPlay, controls.left.canPlay, controls.right.canPlay]);
+
+  // stop play on all ends
+  useEffect(() => {
+    if ([controls.front.playEnded, controls.back.playEnded, controls.left.playEnded, controls.right.playEnded].some(Boolean)) {
+      if (isPlaying && isAutoPlay) {
+        playSibling?.(1);
+        setProgressBarValue(0);
+      }
+    }
+  }, [controls.front.playEnded, controls.back.playEnded, controls.left.playEnded, controls.right.playEnded]);
+
+  const [playtime, setPlaytime] = useState(0);
+  useEffect(() => {
+    if ([controls.front.playtime, controls.back.playtime, controls.left.playtime, controls.right.playtime].some(Boolean)) {
+      setPlaytime(Math.max(controls.front.playtime, controls.back.playtime, controls.left.playtime, controls.right.playtime));
+    }
+  }, [controls.front.playtime, controls.back.playtime, controls.left.playtime, controls.right.playtime]);
+
+  const duration = React.useMemo(
+    () => Math.max(controls.front.duration, controls.back.duration, controls.left.duration, controls.right.duration),
+    [controls.front.duration, controls.back.duration, controls.left.duration, controls.right.duration]
   );
 
-  const shouldRestore = React.useRef(false);
+  const playSiblingAndUpdateControl = (offset: 1 | -1) => {
+    playSibling?.(offset);
+    setPlaytime(0);
+    setIsPlaying(isAutoPlay);
+    setProgressBarValue(0);
+  };
+
+  const shouldContinuePlayingOnDragEnd = React.useRef(false);
+
+  const getVideoProps = (control: ReturnType<typeof useVideoControl>) => ({
+    play: isPlaying,
+    playbackRate,
+    progress: controlledProgress,
+    native: {
+      autoPlay: isAutoPlay,
+      onEnded: () => control.setPlayEnded(true),
+      onCanPlay: (e: React.SyntheticEvent<HTMLVideoElement>) => {
+        control.setCanPlay(true);
+        control.setDuration(e.currentTarget.duration);
+      },
+      onTimeUpdate: (e: React.SyntheticEvent<HTMLVideoElement>) => {
+        const video = e.currentTarget;
+        if (video) {
+          if (video.readyState >= video.HAVE_METADATA) {
+            control.setPlaytime(video.currentTime);
+          }
+        }
+      },
+      // onPlay: () => setIsPlaying(true), // disabling along with `onPause`
+      // onPause: () => setIsPlaying(false), // This may trigger earlier than `onEnded`
+      // onAbort: () => setIsPlaying(false), // This would trigger on switch video source
+      // onSuspend: () => setIsPlaying(false), // This would trigger on start playing
+    },
+  });
 
   return (
-    <Box display="inline-flex" flexDirection="column" border="1px solid transparent" borderColor={"canvas.default"} sx={{ gap: 4 }}>
+    <Box display="flex" flexDirection="column" border="1px solid transparent" borderColor={"canvas.default"} sx={{ gap: 4 }}>
       <Box display="inline-flex" alignItems="center" sx={{ gap: 1, "> *": { flexShrink: 0 } }} flexWrap="wrap">
         <Box display="inline-flex" alignItems="center" sx={{ gap: 1 }}>
           <IconButton aria-label={"Previous"} onClick={() => playSiblingAndUpdateControl(-1)} icon={ChevronLeftIcon} />
@@ -63,10 +138,10 @@ export function MatrixPlayer({ videos, playSibling }: { videos: VideoClipGroup; 
               if (isPlaying) {
                 setIsPlaying(false);
               }
-              shouldRestore.current = isPlaying;
+              shouldContinuePlayingOnDragEnd.current = isPlaying;
             }}
             onDragEnd={() => {
-              if (shouldRestore.current) {
+              if (shouldContinuePlayingOnDragEnd.current) {
                 setIsPlaying(true);
               }
             }}
@@ -124,74 +199,16 @@ export function MatrixPlayer({ videos, playSibling }: { videos: VideoClipGroup; 
           }
         >
           <div>
-            <Video
-              title={"Front"}
-              file={videos.front}
-              play={isPlaying}
-              playbackRate={playbackRate}
-              progress={controlledProgress}
-              native={{
-                autoPlay: isAutoPlay,
-                onTimeUpdate: (e) => {
-                  const video = e.currentTarget;
-                  if (video) {
-                    if (video.readyState >= video.HAVE_METADATA) {
-                      const progress = video.currentTime / video.duration;
-                      setPlaytime(video.currentTime);
-                      setProgressBarValue(progress);
-                    }
-                  }
-                },
-                onCanPlay: (e) => setDuration(e.currentTarget.duration),
-                // onPlay: () => setIsPlaying(true), // disabling along with `onPause`
-                // onPause: () => setIsPlaying(false), // This may trigger earlier than `onEnded`
-                // onAbort: () => setIsPlaying(false), // This would trigger on switch video source
-                // onSuspend: () => setIsPlaying(false), // This would trigger on start playing
-                onEnded: () => {
-                  // Prevent playing next when dragging the progress bar
-                  if (isPlaying && isAutoPlay) {
-                    playSibling?.(1);
-                    setProgressBarValue(0);
-                  }
-                },
-              }}
-            />
+            <Video label={"Front"} ref={controls.front.ref} file={videos.front} {...getVideoProps(controls.front)} />
           </div>
           <div>
-            <Video
-              title={"Back"}
-              file={videos.back}
-              play={isPlaying}
-              playbackRate={playbackRate}
-              progress={controlledProgress}
-              native={{
-                autoPlay: isAutoPlay,
-              }}
-            />
+            <Video label={"Back"} ref={controls.back.ref} file={videos.back} {...getVideoProps(controls.back)} />
           </div>
           <div>
-            <Video
-              title={"Left"}
-              file={videos.left}
-              play={isPlaying}
-              playbackRate={playbackRate}
-              progress={controlledProgress}
-              native={{
-                autoPlay: isAutoPlay,
-              }}
-            />
+            <Video label={"Left"} ref={controls.left.ref} file={videos.left} {...getVideoProps(controls.left)} />
           </div>
           <div>
-            <Video
-              title={"Right"}
-              file={videos.right}
-              play={isPlaying}
-              playbackRate={playbackRate}
-              progress={controlledProgress}
-              native={{
-                autoPlay: isAutoPlay,
-              }}
-            />
+            <Video label={"Right"} ref={controls.right.ref} file={videos.right} {...getVideoProps(controls.right)} />
           </div>
         </LayoutComposer>
       </Box>

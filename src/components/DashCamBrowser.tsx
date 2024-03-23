@@ -105,7 +105,9 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
             </FormControl>
           </Box>
         </Box>
-        <Box as="main">{currentClips && <MatrixPlayer playSibling={playSibling} videos={currentClips} />}</Box>
+        <Box as="main" flex="1">
+          {currentClips && <MatrixPlayer playSibling={playSibling} videos={currentClips} />}
+        </Box>
       </Box>
     </>
   );
