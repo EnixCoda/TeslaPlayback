@@ -67,7 +67,7 @@ const rawArgs = {
     `-i`,
     filenames.input,
     `-vf`,
-    `drawtext=fontfile=${filenames.font}:text=\'hello\':box=1:fontsize=48:fontcolor=white:boxcolor=black`,
+    `drawtext=fontfile=${filenames.font}:text=\\'hello\\':box=1:fontsize=48:fontcolor=white:boxcolor=black`,
     filenames.output,
   ],
   addTimestamp: (baseTime: string) => [
@@ -79,6 +79,7 @@ const rawArgs = {
   ],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type VideoProcessor<Args extends any[]> = (ffmpegHook: (ffmpeg: FFmpeg) => void, ...args: Args) => ReturnType<FFmpeg["readFile"]>;
 
 export const mergeVideos: VideoProcessor<[frontFile: File, backFile: File]> = async (ffmpegHook, frontFile, backFile) => {

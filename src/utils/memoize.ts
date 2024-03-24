@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const memoize = <Args extends any[], R>(
   fn: (...args: Args) => R,
   checkCacheStale?: (args: Args, lastArgs: Args | null) => boolean

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface Pipe {
   (): void;
   <Args extends any[], R>(fn0: (...args: Args) => R): (...args: Args) => R;
