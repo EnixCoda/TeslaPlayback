@@ -105,7 +105,8 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
             </FormControl>
           </Box>
         </Box>
-        <Box as="main" flex="1">
+        {/* minWidth for preventing the area grow out of view */}
+        <Box as="main" flex="1" minWidth="0">
           {currentClips && (
             <MatrixPlayer
               baseTime={currentClipsTimestamp ? TeslaFS.parseTimestamp(currentClipsTimestamp) : new Date()}
