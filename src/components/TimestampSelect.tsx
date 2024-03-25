@@ -12,12 +12,7 @@ export function TimestampSelect({
   return (
     <NavList {...rest}>
       {options.map((option) => (
-        <NavList.Item
-          key={option}
-          aria-current={value === option}
-          onClick={() => onChange(option)}
-          sx={{ whiteSpace: "nowrap", fontFamily: "monospace" }}
-        >
+        <NavList.Item key={option} aria-current={value === option} onClick={() => onChange(option)} sx={{ whiteSpace: "nowrap", fontFamily: "mono" }}>
           {renderOption(option)}
         </NavList.Item>
       ))}

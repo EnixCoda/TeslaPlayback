@@ -85,7 +85,8 @@ export const Video = React.forwardRef<Ref, Props>(function Video({ file, label, 
           <Text sx={{ color: "fg-attention" }}>{friendlyFormatErrorMessage(error)}</Text>
         </Box>
       )}
-      <Box sx={{ backgroundColor: error ? "neutral.emphasis" : undefined }}>
+      <Box display="flex" sx={{ backgroundColor: error ? "neutral.emphasis" : undefined }}>
+        {/* The display="flex" removes the blank area below video */}
         <video ref={videoRef} playsInline onContextMenu={(e) => e.preventDefault()} {...native} style={{ width: "100%", ...native?.style }} />
       </Box>
       <Box display="flex" justifyContent="center">

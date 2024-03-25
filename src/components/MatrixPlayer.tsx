@@ -121,14 +121,14 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
 
   return (
     <Box display="flex" flexDirection="column" border="1px solid transparent" borderColor={"canvas.default"} sx={{ gap: 4 }}>
-      <Box display="inline-flex" alignItems="center" sx={{ gap: 1, "> *": { flexShrink: 0 } }} flexWrap="wrap">
+      <Box display="inline-flex" alignItems="center" sx={{ gap: 3, "> *": { flexShrink: 0 } }} flexWrap="wrap">
         <Box display="inline-flex" alignItems="center" sx={{ gap: 1 }}>
           <IconButton aria-label={"Previous"} onClick={() => playSiblingAndUpdateControl(-1)} icon={ChevronLeftIcon} />
           <IconButton aria-label={isPlaying ? "Pause" : "Play"} onClick={() => setIsPlaying(!isPlaying)} icon={isPlaying ? ColumnsIcon : PlayIcon} />
           <IconButton aria-label={"Next"} onClick={() => playSiblingAndUpdateControl(1)} icon={ChevronRightIcon} />
         </Box>
-        <Box display="inline-flex" alignItems="center" sx={{ gap: 1 }}>
-          <Text sx={{ fontFamily: "monospace" }}>
+        <Box display="inline-flex" alignItems="center" flex="1" sx={{ gap: 1 }}>
+          <Text fontFamily="mono">
             {formatHMS(playtime)}/{formatHMS(duration)}
           </Text>
           <ProgressBar
@@ -152,7 +152,7 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
             }}
           />
         </Box>
-        <Box display="inline-flex" alignItems="center" sx={{ gap: 1 }}>
+        <Box display="inline-flex" alignItems="center" sx={{ gap: 2 }}>
           <DropdownSelect
             title={
               <>
@@ -212,7 +212,7 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
           </div>
         </LayoutComposer>
         <Box position="absolute" top="0" left="0" p={0} bg="#000" lineHeight="1">
-          <Text color="#fff" fontFamily="monospace" fontSize="2vw">
+          <Text color="#fff" fontFamily="mono" fontSize="2vw">
             {formatDateTime(shiftTime(baseTime, playtime))}
           </Text>
         </Box>
