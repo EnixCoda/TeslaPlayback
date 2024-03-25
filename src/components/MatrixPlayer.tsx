@@ -9,9 +9,7 @@ import { DropdownSelect } from "./DropdownSelect";
 import { LayoutComposer } from "./LayoutComposer";
 import { ProgressBar } from "./ProgressBar";
 import { Video, VideoRef } from "./Video";
-import { VideoExporter } from "./VideoExporter";
-
-const enableExport = window.isSecureContext;
+import { VideoExporter } from "./export";
 
 function useVideoControl() {
   const ref = React.useRef<VideoRef | null>(null);
@@ -222,7 +220,9 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
           </Text>
         </Box>
       </Box>
-      {enableExport && <VideoExporter videos={videos} />}
+      <Box>
+        <VideoExporter videos={videos} />
+      </Box>
     </Box>
   );
 }

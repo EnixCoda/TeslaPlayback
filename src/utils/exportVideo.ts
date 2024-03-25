@@ -63,11 +63,11 @@ const rawArgs = {
     -c:a copy
     ${filenames.output}
   `,
-  drawText: [
+  drawText: (text: string) => [
     `-i`,
     filenames.input,
     `-vf`,
-    `drawtext=fontfile=${filenames.font}:text=\\'hello\\':box=1:fontsize=48:fontcolor=white:boxcolor=black`,
+    `drawtext=fontfile=${filenames.font}:text=\\'${text}\\':box=1:fontsize=48:fontcolor=white:boxcolor=black`,
     filenames.output,
   ],
   addTimestamp: (baseTime: string) => [
@@ -96,12 +96,12 @@ export const mergeVideos: VideoProcessor<[frontFile: File, backFile: File]> = as
   return outputFile;
 };
 
-export const drawTextToVideo: VideoProcessor<[originalFile: File]> = async (ffmpegHook, originalFile) => {
+export const drawTextToVideo: VideoProcessor<[originalFile: File, text: string]> = async (ffmpegHook, originalFile, text) => {
   const ffmpeg = await loadFFMpeg();
   ffmpegHook(ffmpeg);
   await ffmpeg.writeFile(filenames.input, new Uint8Array(await readFileAsArrayBuffer(originalFile)));
   await ffmpeg.writeFile(filenames.font, await loadFontFile());
-  const args = rawArgs.drawText;
+  const args = rawArgs.drawText(text);
   await ffmpeg.exec(args);
   const outputFile = await ffmpeg.readFile(filenames.output);
   return outputFile;
