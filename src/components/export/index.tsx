@@ -3,7 +3,7 @@ import { Button } from "@primer/react";
 import { useState } from "react";
 import { VideoClipGroup } from "../../common";
 import { run } from "../../utils/general";
-import { MDialog } from "../base/Dialog";
+import { Dialog } from "../base/Dialog";
 import { ExportDone } from "./ExportDone";
 import { ExportFail } from "./ExportFail";
 import { ExportIdle } from "./ExportIdle";
@@ -33,7 +33,7 @@ export function VideoExporter({ videos }: { videos: VideoClipGroup }) {
   });
 
   return (
-    <MDialog<HTMLButtonElement>
+    <Dialog<HTMLButtonElement>
       trigger={(isOpen, ref) => (
         <Button ref={ref} onClick={() => isOpen.set(true)}>
           Export current event
@@ -56,6 +56,6 @@ export function VideoExporter({ videos }: { videos: VideoClipGroup }) {
             return <ExportFail exportState={exportState} setExportState={setExportState} />;
         }
       })}
-    </MDialog>
+    </Dialog>
   );
 }
