@@ -1,6 +1,6 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { Button } from "@primer/react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { VideoClipGroup } from "../../common";
 import { run } from "../../utils/general";
 import { Dialog } from "../base/Dialog";
@@ -27,7 +27,7 @@ export type ExportStateFail = {
 
 export type ExportState = ExportStateIdle | ExportStateProcessing | ExportStateDone | ExportStateFail;
 
-export function VideoExporter({ videos }: { videos: VideoClipGroup }) {
+export const VideoExporter = memo(function VideoExporter({ videos }: { videos: VideoClipGroup }) {
   const [exportState, setExportState] = useState<ExportState>({
     state: "idle",
   });
@@ -43,19 +43,16 @@ export function VideoExporter({ videos }: { videos: VideoClipGroup }) {
     >
       {run(() => {
         switch (exportState.state) {
-          case "idle": {
+          case "idle":
             return <ExportIdle {...{ videos, exportState, setExportState }} />;
-          }
-          case "processing": {
+          case "processing":
             return <ExportProcessing {...{ exportState, setExportState }} />;
-          }
-          case "done": {
+          case "done":
             return <ExportDone {...{ exportState, setExportState }} />;
-          }
           case "fail":
             return <ExportFail exportState={exportState} setExportState={setExportState} />;
         }
       })}
     </Dialog>
   );
-}
+});
