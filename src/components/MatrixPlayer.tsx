@@ -43,6 +43,7 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
     if (controlledProgress !== progressBarValue) {
       setProgressBarValue(controlledProgress);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controlledProgress]);
 
   const [layoutKey, setLayoutKey] = useState<LayoutKey>("1/2/1");
@@ -56,21 +57,25 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
   };
 
   // start playing on all can play
+  const allReady = [controls.front.canPlay, controls.back.canPlay, controls.left.canPlay, controls.right.canPlay].every(Boolean);
   useEffect(() => {
-    if ([controls.front.canPlay, controls.back.canPlay, controls.left.canPlay, controls.right.canPlay].every(Boolean)) {
+    if (allReady) {
       setIsPlaying(isAutoPlay);
     }
-  }, [controls.front.canPlay, controls.back.canPlay, controls.left.canPlay, controls.right.canPlay]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allReady]);
 
   // stop play on all ends
+  const anyPlayEnds = [controls.front.playEnded, controls.back.playEnded, controls.left.playEnded, controls.right.playEnded].some(Boolean);
   useEffect(() => {
-    if ([controls.front.playEnded, controls.back.playEnded, controls.left.playEnded, controls.right.playEnded].some(Boolean)) {
+    if (anyPlayEnds) {
       if (isPlaying && isAutoPlay) {
         playSibling?.(1);
         setProgressBarValue(0);
       }
     }
-  }, [controls.front.playEnded, controls.back.playEnded, controls.left.playEnded, controls.right.playEnded]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anyPlayEnds]);
 
   const [playtime, setPlaytime] = useState(0);
   useEffect(() => {
