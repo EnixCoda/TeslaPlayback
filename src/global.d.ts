@@ -1,9 +1,9 @@
 /// <reference lib="react" />
 
-type Option<T> = { id: string; value: T };
+type Option<T> = { value: T; label: React.ReactNode };
 
-type IO<T> = {
-  value: T;
+type IO<T, V = T> = {
+  value: V;
   onChange: (value: T) => void;
 };
 

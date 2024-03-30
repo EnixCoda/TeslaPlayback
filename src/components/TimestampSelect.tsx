@@ -1,6 +1,6 @@
 import { NavList, NavListProps } from "@primer/react";
 import { TeslaFS } from "../TeslaFS";
-import { CommonSelectProps } from "./Select";
+import { CommonSelectProps } from "./base/Select";
 
 export function TimestampSelect({
   options,

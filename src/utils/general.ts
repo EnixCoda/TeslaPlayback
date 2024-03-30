@@ -60,6 +60,20 @@ export function formatDateTime(dateTime: Date) {
     .replace(/\.\d+Z$/, "");
 }
 
+export function formatHHMMSS(seconds: number) {
+  // HH:MM:SS
+  const h = Math.floor(seconds / 60 / 60);
+  const m = Math.floor(seconds / 60) % 60;
+  const s = seconds % 60;
+  return [h, m, s].map((x) => x.toString().padStart(2, "0")).join(":");
+}
+
 export function shiftTime(time: Date, shift: number) {
   return new Date(shift * 1000 + time.getTime());
 }
+
+export const entries = <K extends string | number | symbol, V>(obj: Record<K, V> | Partial<Record<K, V>>) => Object.entries(obj) as [K, V][];
+
+export const fromEntries = <K extends string | number | symbol, V>(entries: [K, V][]) => Object.fromEntries(entries) as Record<K, V>;
+
+export const isNotFalsy = <T>(item: T | false | 0 | null | undefined | ""): item is T => !!item;

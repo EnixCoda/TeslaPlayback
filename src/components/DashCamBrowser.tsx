@@ -9,9 +9,9 @@ import { usePlaySibling } from "../hooks/usePlaySibling";
 import { getSortedKeys } from "../utils/general";
 import { MatrixPlayer } from "./MatrixPlayer";
 import { ParserLogViewer } from "./ParserLogViewer";
-import { Select } from "./Select";
 import { SubNavs } from "./SubNavs";
 import { TimestampSelect } from "./TimestampSelect";
+import { Select } from "./base/Select";
 
 export function DashCamBrowser({ fileList }: { fileList: FileList }) {
   const { eventGroup, eventsIndex, parserLog } = useDashCamEvents(fileList) ?? {};
