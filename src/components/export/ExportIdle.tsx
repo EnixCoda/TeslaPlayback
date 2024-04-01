@@ -71,7 +71,7 @@ export function ExportIdle({ setExportState, videos }: { setExportState: (state:
       let failed = false;
       const outputFile = await processVideo(
         (ffmpeg) => {
-          setExportState({ state: "processing", ffmpeg });
+          setExportState({ state: "processing", ffmpeg, totalTime: trimEndField.value - trimStartField.value || undefined });
           ffmpeg.on("log", ({ message }) => {
             console.log("[ffmpeg]", message);
             switch (message) {

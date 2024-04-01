@@ -10,7 +10,7 @@ export function ExportProcessing({
   exportState: ExportStateProcessing;
   setExportState: (state: ExportStateIdle) => void;
 }) {
-  const { ffmpeg } = exportState;
+  const { ffmpeg, totalTime } = exportState;
   const [progress, setProgress] = useState<ProgressEvent>({
     progress: 0,
     time: 0,
@@ -23,12 +23,16 @@ export function ExportProcessing({
     return () => ffmpeg.off("progress", onProgress);
   }, [ffmpeg]);
 
+  const [processedTime, TotalTimeToProcess]: [number, number] = totalTime
+    ? [progress.time / 1000000, totalTime]
+    : [progress.time / 1000000, progress.time / (progress.progress || 1) / 1000000];
+
   return (
     <Box>
       <Box display="flex" alignItems="center" sx={{ gap: 2 }}>
-        <PrimerProgressBar sx={{ flex: 1 }} progress={progress.progress * 100} />
+        <PrimerProgressBar sx={{ flex: 1 }} progress={(processedTime / TotalTimeToProcess) * 100} />
         <Text>
-          {(progress.time / 1000000).toFixed(1) + "s"}/{(progress.time / (progress.progress || 1) / 1000000).toFixed(1) + "s"}
+          {processedTime.toFixed(1)}s / {TotalTimeToProcess.toFixed(1)}s
         </Text>
         <Button
           onClick={() => {

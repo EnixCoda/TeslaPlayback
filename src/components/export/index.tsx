@@ -15,6 +15,7 @@ export type ExportStateIdle = {
 export type ExportStateProcessing = {
   state: "processing";
   ffmpeg: FFmpeg;
+  totalTime?: number;
 };
 export type ExportStateDone = {
   state: "done";
