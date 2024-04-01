@@ -1,5 +1,5 @@
 import { ProgressEvent } from "@ffmpeg/ffmpeg/types";
-import { Box, Button, ProgressBar as PrimerProgressBar, Text } from "@primer/react";
+import { Box, Button, ProgressBar, Text } from "@primer/react";
 import { useEffect, useState } from "react";
 import { ExportStateIdle, ExportStateProcessing } from ".";
 
@@ -30,7 +30,7 @@ export function ExportProcessing({
   return (
     <Box>
       <Box display="flex" alignItems="center" sx={{ gap: 2 }}>
-        <PrimerProgressBar sx={{ flex: 1 }} progress={(processedTime / TotalTimeToProcess) * 100} />
+        <ProgressBar sx={{ flex: 1 }} animated progress={(processedTime / TotalTimeToProcess) * 100} />
         <Text>
           {processedTime.toFixed(1)}s / {TotalTimeToProcess.toFixed(1)}s
         </Text>
