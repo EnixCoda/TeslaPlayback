@@ -16,7 +16,15 @@ const cameraOptions: Option<CameraOption>[] = ([...directions, "all"] satisfies 
   label: option.toUpperCase()[0] + option.substring(1),
 }));
 
-export function ExportIdle({ setExportState, videos }: { setExportState: (state: ExportState) => void; videos: VideoClipGroup }) {
+export function ExportIdle({
+  setExportState,
+  videos,
+  totalTime,
+}: {
+  setExportState: (state: ExportState) => void;
+  videos: VideoClipGroup;
+  totalTime?: number;
+}) {
   const [view, setView] = useState<CameraOption>("front");
   const fileMap = useMemo(() => {
     const { front, back, left, right } = videos;
@@ -44,9 +52,7 @@ export function ExportIdle({ setExportState, videos }: { setExportState: (state:
   }, [fontSizeField.value]);
 
   const trimStartField = useNumberField(0);
-  const trimEndField = useNumberField(60);
-
-  const videoTotalPlayTime = Infinity; // TODO
+  const trimEndField = useNumberField(totalTime ?? 60);
 
   const resolvedTextToDraw = useMemo(() => {
     if (!fileMap) return undefined;
@@ -191,12 +197,12 @@ export function ExportIdle({ setExportState, videos }: { setExportState: (state:
         )}
       </FormControl>
       <Box display="flex" sx={{ gap: 2 }}>
-        <FormControl>
+        <FormControl disabled={!totalTime}>
           <FormControl.Label>Trim Start</FormControl.Label>
           <TextInput
             type="number"
             min={0}
-            max={videoTotalPlayTime}
+            max={totalTime}
             trailingVisual="seconds"
             value={trimStartField.raw ?? ""}
             onChange={(e) => trimStartField.setRaw(e.target.value)}
@@ -205,12 +211,12 @@ export function ExportIdle({ setExportState, videos }: { setExportState: (state:
             <FormControl.Validation variant={trimStartField.validation.type}>{trimStartField.validation.message}</FormControl.Validation>
           )}
         </FormControl>
-        <FormControl>
+        <FormControl disabled={!totalTime}>
           <FormControl.Label>Trim End</FormControl.Label>
           <TextInput
             type="number"
             min={0}
-            max={videoTotalPlayTime}
+            max={totalTime}
             trailingVisual="seconds"
             value={trimEndField.raw ?? ""}
             onChange={(e) => trimEndField.setRaw(e.target.value)}

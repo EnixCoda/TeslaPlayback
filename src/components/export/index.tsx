@@ -29,9 +29,11 @@ export type ExportStateFail = {
 export type ExportState = ExportStateIdle | ExportStateProcessing | ExportStateDone | ExportStateFail;
 
 export const VideoExporter = memo(function VideoExporter({
+  totalTime,
   videos,
   videoPlayControl,
 }: {
+  totalTime: number;
   videos: VideoClipGroup;
   videoPlayControl?: {
     play?: () => void;
@@ -61,11 +63,11 @@ export const VideoExporter = memo(function VideoExporter({
       {run(() => {
         switch (exportState.state) {
           case "idle":
-            return <ExportIdle {...{ videos, exportState, setExportState }} />;
+            return <ExportIdle videos={videos} totalTime={totalTime} setExportState={setExportState} />;
           case "processing":
-            return <ExportProcessing {...{ exportState, setExportState }} />;
+            return <ExportProcessing exportState={exportState} setExportState={setExportState} />;
           case "done":
-            return <ExportDone {...{ exportState, setExportState }} />;
+            return <ExportDone exportState={exportState} setExportState={setExportState} />;
           case "fail":
             return <ExportFail exportState={exportState} setExportState={setExportState} />;
         }

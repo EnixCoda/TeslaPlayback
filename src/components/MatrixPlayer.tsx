@@ -83,7 +83,7 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
   }, [controls.front.playtime, controls.back.playtime, controls.left.playtime, controls.right.playtime]);
 
   const duration = React.useMemo(
-    () => Math.max(controls.front.duration, controls.back.duration, controls.left.duration, controls.right.duration),
+    () => Math.max(controls.front.duration, controls.back.duration, controls.left.duration, controls.right.duration) || 0,
     [controls.front.duration, controls.back.duration, controls.left.duration, controls.right.duration]
   );
 
@@ -222,6 +222,7 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
       </Box>
       <Box>
         <VideoExporter
+          totalTime={duration}
           videos={videos}
           videoPlayControl={{
             pause: () => setIsPlaying(false),
