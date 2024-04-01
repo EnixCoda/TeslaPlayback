@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 export type CommonSelectProps<T extends string> = {
   options: T[] | Option<T>[];
-  renderOption?: (option: T | Option<T>) => ReactNode;
+  renderOption?: (option: Option<T>) => ReactNode;
 } & IO<T, T | null>;
 
 export function Select<T extends string>({
@@ -21,7 +21,7 @@ export function Select<T extends string>({
           aria-current={value === option}
           value={typeof option === "string" ? option : option.value}
         >
-          {renderOption(option)}
+          {renderOption(typeof option === "string" ? { value: option, label: option } : option)}
         </PrimerSelect.Option>
       ))}
     </PrimerSelect>

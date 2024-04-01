@@ -60,7 +60,7 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
               <TimestampSelect
                 sx={{ maxHeight: 600, overflowY: "auto" }}
                 options={allEventTimestampsOrdered}
-                renderOption={(timestamp) => (
+                renderOption={({ value: timestamp }) => (
                   <>
                     {TeslaFS.formatTimestamp(timestamp)} <CounterLabel>{Object.keys(eventGroup[timestamp]).length}</CounterLabel>
                   </>
@@ -89,7 +89,7 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
               </FormControl.Label>
               <Select
                 options={allEventTimestampsOrdered}
-                renderOption={(timestamp) => `${TeslaFS.formatTimestamp(timestamp)} (${Object.keys(eventGroup[timestamp]).length})`}
+                renderOption={({ value: timestamp }) => `${TeslaFS.formatTimestamp(timestamp)} (${Object.keys(eventGroup[timestamp]).length})`}
                 value={currentEventTimestamp}
                 onChange={(timestamp) => {
                   setCurrentClipsTimestamp(null);

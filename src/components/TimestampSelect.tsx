@@ -6,14 +6,19 @@ export function TimestampSelect({
   options,
   value,
   onChange,
-  renderOption = (option) => TeslaFS.formatTimestamp(option),
+  renderOption = ({ value }) => TeslaFS.formatTimestamp(value),
   ...rest
 }: Omit<NonConflictJoin<CommonSelectProps<TeslaFS.Timestamp>, NavListProps>, "children">) {
   return (
     <NavList {...rest}>
       {options.map((option) => (
-        <NavList.Item key={option} aria-current={value === option} onClick={() => onChange(option)} sx={{ whiteSpace: "nowrap", fontFamily: "mono" }}>
-          {renderOption(option)}
+        <NavList.Item
+          key={typeof option === "string" ? option : option.value}
+          aria-current={value === option}
+          onClick={() => onChange(typeof option === "string" ? option : option.value)}
+          sx={{ whiteSpace: "nowrap", fontFamily: "mono" }}
+        >
+          {renderOption(typeof option === "string" ? { value: option, label: option } : option)}
         </NavList.Item>
       ))}
     </NavList>
