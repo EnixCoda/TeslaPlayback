@@ -1,5 +1,5 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { Button } from "@primer/react";
+import { Box, Button, Text } from "@primer/react";
 import { memo, useState } from "react";
 import { VideoClipGroup } from "../../common";
 import { run } from "../../utils/general";
@@ -11,6 +11,9 @@ import { ExportProcessing } from "./ExportProcessing";
 
 export type ExportStateIdle = {
   state: "idle";
+};
+export type ExportStateLoadingFFMpeg = {
+  state: "loadingFFMpeg";
 };
 export type ExportStateProcessing = {
   state: "processing";
@@ -26,7 +29,7 @@ export type ExportStateFail = {
   reason: string;
 };
 
-export type ExportState = ExportStateIdle | ExportStateProcessing | ExportStateDone | ExportStateFail;
+export type ExportState = ExportStateIdle | ExportStateLoadingFFMpeg | ExportStateProcessing | ExportStateDone | ExportStateFail;
 
 export const VideoExporter = memo(function VideoExporter({
   totalTime,
@@ -60,10 +63,18 @@ export const VideoExporter = memo(function VideoExporter({
         if (isOpen) videoPlayControl?.pause?.();
       }}
     >
+      <Box
+        display={
+          /* To restore state after exporting */
+          exportState.state === "idle" ? undefined : "none"
+        }
+      >
+        <ExportIdle videos={videos} totalTime={totalTime} setExportState={setExportState} />
+      </Box>
       {run(() => {
         switch (exportState.state) {
-          case "idle":
-            return <ExportIdle videos={videos} totalTime={totalTime} setExportState={setExportState} />;
+          case "loadingFFMpeg":
+            return <Text>Loading plugins for exporting video...</Text>;
           case "processing":
             return <ExportProcessing exportState={exportState} setExportState={setExportState} />;
           case "done":

@@ -3,7 +3,6 @@ import { fetchFile } from "@ffmpeg/util";
 import fontArial from "../assets/fonts/Arial.ttf?url";
 import { Directions, directions } from "../common";
 import { ComplexFilterChainStep, DrawTextArgs, DrawTextOptions, FFmpegArgsComposer } from "./FFmpegArgsComposer";
-import { loadFFMpeg } from "./ffmpeg.entry";
 import { entries, formatHHMMSS, fromEntries, readFileAsArrayBuffer } from "./general";
 import { memoize } from "./memoize";
 
@@ -117,7 +116,7 @@ const spellBook = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type VideoProcessJob<Args extends any[]> = (ffmpegHook: (ffmpeg: FFmpeg) => void, ...args: Args) => ReturnType<FFmpeg["readFile"]>;
+type VideoProcessJob<Args extends any[]> = (ffmpeg: FFmpeg, ...args: Args) => ReturnType<FFmpeg["readFile"]>;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ProcessWork<Args extends any[]> {
@@ -136,9 +135,7 @@ export async function getArgs<Args extends any[]>(composeArgs: ProcessWork<Args>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createProcessJob: <Args extends any[]>(work: ProcessWork<Args>) => VideoProcessJob<Args> =
   (work) =>
-  async (ffmpegHook, ...args) => {
-    const ffmpeg = await loadFFMpeg();
-    ffmpegHook(ffmpeg);
+  async (ffmpeg, ...args) => {
     await ffmpeg.exec(await getArgs(work, ffmpeg, args));
     return await ffmpeg.readFile(filenames.output);
   };

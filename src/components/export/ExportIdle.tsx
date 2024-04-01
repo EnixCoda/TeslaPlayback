@@ -5,6 +5,7 @@ import { TeslaFS } from "../../TeslaFS";
 import { Directions, VideoClipGroup, directions } from "../../common";
 import { DrawTextOptions } from "../../utils/FFmpegArgsComposer";
 import { processVideo } from "../../utils/exportVideo";
+import { loadFFMpeg } from "../../utils/ffmpeg.entry";
 import { entries, getBlob } from "../../utils/general";
 import { ExpandButton } from "../base/ExpandButton";
 import { Select } from "../base/Select";
@@ -75,30 +76,27 @@ export function ExportIdle({
       if (!fileMap) return;
 
       let failed = false;
-      const outputFile = await processVideo(
-        (ffmpeg) => {
-          setExportState({ state: "processing", ffmpeg, totalTime: trimEndField.value - trimStartField.value || undefined });
-          ffmpeg.on("log", ({ message }) => {
-            console.log("[ffmpeg]", message);
-            switch (message) {
-              case "Aborted(OOM)": {
-                failed = true;
-                setExportState({ state: "fail", reason: "ffmpeg ran out of memory." });
-                break;
-              }
-            }
-          });
-        },
-        fileMap,
-        {
-          textToDraw: resolvedTextToDraw,
-          textStyle: drawTextOptions,
-          trim: {
-            startTime: trimStartField.value,
-            endTime: trimEndField.value,
-          },
+      setExportState({ state: "loadingFFMpeg" });
+      const ffmpeg = await loadFFMpeg();
+      setExportState({ state: "processing", ffmpeg, totalTime: trimEndField.value - trimStartField.value || undefined });
+      ffmpeg.on("log", ({ message }) => {
+        console.log("[ffmpeg]", message);
+        switch (message) {
+          case "Aborted(OOM)": {
+            failed = true;
+            setExportState({ state: "fail", reason: "ffmpeg ran out of memory." });
+            break;
+          }
         }
-      );
+      });
+      const outputFile = await processVideo(ffmpeg, fileMap, {
+        textToDraw: resolvedTextToDraw,
+        textStyle: drawTextOptions,
+        trim: {
+          startTime: trimStartField.value,
+          endTime: trimEndField.value,
+        },
+      });
       if (typeof outputFile === "string") {
         failed = true;
         setExportState({
@@ -118,6 +116,11 @@ export function ExportIdle({
             setExportState({ state: "fail", reason: "Failed to relaunch Web Worker. Please refresh and retry." });
             return;
           default:
+            if (err.message.startsWith("Failed to fetch dynamically imported module:")) {
+              setExportState({ state: "fail", reason: "Failed to load extra dependency for processing videos. Please enable network and retry." });
+              return;
+            }
+
             console.error(err);
             setExportState({ state: "fail", reason: err.message });
             return;
