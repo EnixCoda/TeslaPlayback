@@ -4,8 +4,8 @@ import { Directions, EventsIndex, PlaybackEventGroup } from "../common";
 
 const suffixToDirectionMap: Record<ValueOf<typeof TeslaFS.SUFFIXES>, Directions> = {
   [TeslaFS.SUFFIXES.FRONT]: "front",
-  [TeslaFS.SUFFIXES.BACK]: "back",
-  [TeslaFS.SUFFIXES.REAR_VIEW]: "back",
+  [TeslaFS.SUFFIXES.REAR]: "rear",
+  [TeslaFS.SUFFIXES.REAR_VIEW]: "rear",
   [TeslaFS.SUFFIXES.LEFT_REPEATER]: "left",
   [TeslaFS.SUFFIXES.RIGHT_REPEATER]: "right",
 };

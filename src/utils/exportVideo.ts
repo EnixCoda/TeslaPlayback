@@ -10,7 +10,7 @@ import { memoize } from "./memoize";
 const filenames = {
   input: "input.mp4",
   front: "input_front.mp4",
-  back: "input_back.mp4",
+  rear: "input_rear.mp4",
   left: "input_left.mp4",
   right: "input_right.mp4",
   output: "output.mp4",
@@ -25,7 +25,7 @@ const spellBook = {
       height: h = 960,
       directions = {
         front: true,
-        back: true,
+        rear: true,
         left: true,
         right: true,
       },
@@ -36,7 +36,7 @@ const spellBook = {
     }
   ) => {
     if (directions.front) composer.addInput(filenames.front);
-    if (directions.back) composer.addInput(filenames.back);
+    if (directions.rear) composer.addInput(filenames.rear);
     if (directions.left) composer.addInput(filenames.left);
     if (directions.right) composer.addInput(filenames.right);
 
@@ -50,7 +50,7 @@ const spellBook = {
       chain.append(new ComplexFilterChainStep(`[0:v] setpts=PTS-STARTPTS, scale=${w}*${h}`).setTag(layer));
       chain.append(new ComplexFilterChainStep(`[${layer}] overlay=shortest=1:x=0:y=0`).setAffix(lastTag));
     }
-    if (directions.back) {
+    if (directions.rear) {
       const layer = `upperRight`;
       const lastTag = chain.tagger.iterateTag();
       chain.steps.at(-1)?.setTag(lastTag);

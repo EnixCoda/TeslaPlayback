@@ -29,7 +29,7 @@ export namespace TeslaFS {
 
   export const SUFFIXES = {
     FRONT: "front",
-    BACK: "back",
+    REAR: "back",
     REAR_VIEW: "rear_view",
     LEFT_REPEATER: "left_repeater",
     RIGHT_REPEATER: "right_repeater",

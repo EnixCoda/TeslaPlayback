@@ -27,9 +27,9 @@ export function ExportIdle({
 }) {
   const [view, setView] = useState<CameraOption>("front");
   const fileMap = useMemo(() => {
-    const { front, back, left, right } = videos;
+    const { front, rear, left, right } = videos;
     if (view === "all") {
-      if (front || back || left || right) return { front, back, left, right };
+      if (front || rear || left || right) return { front, rear, left, right };
     } else if (videos[view]) {
       return { [view]: videos[view] } satisfies Partial<Record<Directions, File | undefined>>;
     }

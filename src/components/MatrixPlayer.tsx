@@ -49,13 +49,13 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
 
   const controls: Record<Directions, ReturnType<typeof useVideoControl>> = {
     front: useVideoControl(),
-    back: useVideoControl(),
+    rear: useVideoControl(),
     left: useVideoControl(),
     right: useVideoControl(),
   };
 
   // start playing on all can play
-  const allReady = [controls.front.canPlay, controls.back.canPlay, controls.left.canPlay, controls.right.canPlay].every(Boolean);
+  const allReady = [controls.front.canPlay, controls.rear.canPlay, controls.left.canPlay, controls.right.canPlay].every(Boolean);
   useEffect(() => {
     if (allReady) {
       setIsPlaying(isAutoPlay);
@@ -64,7 +64,7 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
   }, [allReady]);
 
   // stop play on all ends
-  const anyPlayEnds = [controls.front.playEnded, controls.back.playEnded, controls.left.playEnded, controls.right.playEnded].some(Boolean);
+  const anyPlayEnds = [controls.front.playEnded, controls.rear.playEnded, controls.left.playEnded, controls.right.playEnded].some(Boolean);
   useEffect(() => {
     if (anyPlayEnds) {
       if (isPlaying && isAutoPlay) {
@@ -77,14 +77,14 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
 
   const [playtime, setPlaytime] = useState(0);
   useEffect(() => {
-    if ([controls.front.playtime, controls.back.playtime, controls.left.playtime, controls.right.playtime].some(Boolean)) {
-      setPlaytime(Math.max(controls.front.playtime, controls.back.playtime, controls.left.playtime, controls.right.playtime));
+    if ([controls.front.playtime, controls.rear.playtime, controls.left.playtime, controls.right.playtime].some(Boolean)) {
+      setPlaytime(Math.max(controls.front.playtime, controls.rear.playtime, controls.left.playtime, controls.right.playtime));
     }
-  }, [controls.front.playtime, controls.back.playtime, controls.left.playtime, controls.right.playtime]);
+  }, [controls.front.playtime, controls.rear.playtime, controls.left.playtime, controls.right.playtime]);
 
   const duration = React.useMemo(
-    () => Math.max(controls.front.duration, controls.back.duration, controls.left.duration, controls.right.duration) || 0,
-    [controls.front.duration, controls.back.duration, controls.left.duration, controls.right.duration]
+    () => Math.max(controls.front.duration, controls.rear.duration, controls.left.duration, controls.right.duration) || 0,
+    [controls.front.duration, controls.rear.duration, controls.left.duration, controls.right.duration]
   );
 
   const playSiblingAndUpdateControl = (offset: 1 | -1) => {
@@ -205,7 +205,7 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
             <Video label={"Front"} ref={controls.front.ref} file={videos.front} {...getVideoProps(controls.front)} />
           </div>
           <div>
-            <Video label={"Back"} ref={controls.back.ref} file={videos.back} {...getVideoProps(controls.back)} />
+            <Video label={"Rear"} ref={controls.rear.ref} file={videos.rear} {...getVideoProps(controls.rear)} />
           </div>
           <div>
             <Video label={"Left"} ref={controls.left.ref} file={videos.left} {...getVideoProps(controls.left)} />
