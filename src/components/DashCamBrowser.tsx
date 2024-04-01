@@ -13,7 +13,7 @@ import { SubNavs } from "./SubNavs";
 import { TimestampSelect } from "./TimestampSelect";
 import { Select } from "./base/Select";
 
-export function DashCamBrowser({ fileList }: { fileList: FileList }) {
+export function DashCamBrowser({ fileList }: { fileList: FileListLike }) {
   const { eventGroup, eventsIndex, parserLog } = useDashCamEvents(fileList) ?? {};
   const availableScopes = useMemo(() => TeslaFS.clipScopes.filter((scope) => !!eventsIndex[scope]?.length), [eventsIndex]);
   const [focusedScope, setFocusedScope] = useState<TeslaFS.ClipScope | null>(null);
@@ -73,7 +73,10 @@ export function DashCamBrowser({ fileList }: { fileList: FileList }) {
               />
             </FormControl>
             <FormControl>
-              <FormControl.Label>Clips of event</FormControl.Label>
+              <FormControl.Label>
+                Clips of event
+                <CounterLabel>{currentEventTimestamps.length}</CounterLabel>
+              </FormControl.Label>
               <TimestampSelect
                 sx={{ maxHeight: 600, overflowY: "auto" }}
                 options={currentEventTimestamps}

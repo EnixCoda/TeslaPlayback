@@ -1,12 +1,13 @@
 import { BaseStyles, Box, Header, Heading, Text, ThemeProvider } from "@primer/react";
 import { useState } from "react";
 import { DashCamBrowser } from "./DashCamBrowser";
+import { DemoVideoLoader } from "./DemoVideoLoader";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { LoadFilesButton } from "./LoadFilesButton";
 import { UsageGuide } from "./UsageGuide";
 
 export function App() {
-  const [fileList, setFileList] = useState<FileList | null>(null);
+  const [fileList, setFileList] = useState<FileListLike | null>(null);
 
   const loadFilesButton = (
     <LoadFilesButton
@@ -49,6 +50,7 @@ export function App() {
                   <Text>Browse, view, and export your Tesla DashCam videos for free.</Text>
                   <Box>{loadFilesButton}</Box>
                   <UsageGuide />
+                  <DemoVideoLoader setFileList={setFileList} />
                 </Box>
               )}
             </ErrorBoundary>

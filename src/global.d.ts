@@ -21,3 +21,9 @@ type ValueOfArray<T extends any[] | readonly any[]> = T[number];
 interface ObjectConstructor {
   entries<Key extends string, T>(o: Record<Key, T>): [Key, T][];
 }
+
+interface FileListLike {
+  [Symbol.iterator](): IterableIterator<File>;
+  length: number;
+  [key: number]: File;
+}

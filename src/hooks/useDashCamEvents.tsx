@@ -12,7 +12,7 @@ const suffixToDirectionMap: Record<ValueOf<typeof TeslaFS.SUFFIXES>, Directions>
 
 const findTimestamp = (str?: string): TeslaFS.Timestamp | undefined => str?.match(/\d{4}-\d{2}-\d{2}_\d{2}-\d{2}(-\d{2})?/)?.[0];
 
-export function useDashCamEvents(files: FileList) {
+export function useDashCamEvents(files: FileListLike) {
   return React.useMemo(() => {
     const eventsIndex: EventsIndex = {
       RecentClips: [],
@@ -39,7 +39,7 @@ export function useDashCamEvents(files: FileList) {
         // for RecentClips, files are not grouped with folders
         findTimestamp(splitDirectories[splitDirectories.length - 1]);
       if (!playbackTimestamp || !eventTimestamp) {
-        parserLog.push({ file, message: `"File name does not match expected pattern` });
+        parserLog.push({ file, message: `File name does not match expected pattern` });
         continue;
       }
 
