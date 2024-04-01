@@ -1,5 +1,6 @@
 import { Box, Button, Checkbox, FormControl, Radio, RadioGroup, Text, TextInput } from "@primer/react";
 import { useEffect, useMemo, useState } from "react";
+import UAParserJS from "ua-parser-js";
 import { ExportState } from ".";
 import { TeslaFS } from "../../TeslaFS";
 import { Directions, VideoClipGroup, directions } from "../../common";
@@ -136,11 +137,10 @@ export function ExportIdle({
       <FormControl>
         <FormControl.Label>Cameras</FormControl.Label>
         <Select<CameraOption> sx={{ width: "100%" }} value={view} onChange={(option) => setView(option)} options={cameraOptions} />
-        {view === "all" && (
-          <FormControl.Caption>
-            Exporting all cameras will merge them into a single video. This feature might only work on Firefox, not available on other browsers.
-          </FormControl.Caption>
+        {view === "all" && !new UAParserJS().getBrowser().name?.includes("Firefox") && (
+          <FormControl.Validation variant="error">Merging all is only supported on Firefox.</FormControl.Validation>
         )}
+        <FormControl.Caption>The source camera for exporting. Choose "All" to merge videos from 4 cameras.</FormControl.Caption>
       </FormControl>
       <FormControl>
         <Checkbox checked={shouldDrawText} onChange={(e) => setShouldDrawText(e.target.checked)} />
