@@ -28,7 +28,20 @@ export type ExportStateFail = {
 
 export type ExportState = ExportStateIdle | ExportStateProcessing | ExportStateDone | ExportStateFail;
 
-export const VideoExporter = memo(function VideoExporter({ videos }: { videos: VideoClipGroup }) {
+export const VideoExporter = memo(function VideoExporter({
+  videos,
+  videoPlayControl,
+}: {
+  videos: VideoClipGroup;
+  videoPlayControl?: {
+    play?: () => void;
+    pause?: () => void;
+    setPlaytime?: (time: number) => void;
+    setPlaybackRate?: (rate: number) => void;
+    setProgressBarValue?: (value: number) => void;
+    setControlledProgress?: (value: number) => void;
+  };
+}) {
   const [exportState, setExportState] = useState<ExportState>({
     state: "idle",
   });
@@ -41,6 +54,9 @@ export const VideoExporter = memo(function VideoExporter({ videos }: { videos: V
         </Button>
       )}
       title="Export"
+      onChangeIsOpen={(isOpen) => {
+        if (isOpen) videoPlayControl?.pause?.();
+      }}
     >
       {run(() => {
         switch (exportState.state) {

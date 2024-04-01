@@ -221,7 +221,12 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
         </Box>
       </Box>
       <Box>
-        <VideoExporter videos={videos} />
+        <VideoExporter
+          videos={videos}
+          videoPlayControl={{
+            pause: () => setIsPlaying(false),
+          }}
+        />
       </Box>
     </Box>
   );

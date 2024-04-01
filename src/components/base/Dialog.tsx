@@ -12,6 +12,7 @@ export function Dialog<E extends HTMLElement>({
   title?: ReactNode;
   headerProps?: Partial<DialogHeaderProps>;
   dialogProps?: Partial<DialogProps>;
+  onChangeIsOpen?: (isOpen: boolean) => void;
 }>) {
   const [isOpen, setIsOpen] = useState(false);
   const returnFocusRef = useRef<E | null>(null);
