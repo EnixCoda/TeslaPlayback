@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import UAParserJS from "ua-parser-js";
 import { ExportState } from ".";
 import { TeslaFS } from "../../TeslaFS";
-import { Directions, VideoClipGroup, directions } from "../../common";
+import { Directions, VideoClipGroup } from "../../common";
 import { DrawTextOptions } from "../../utils/FFmpegArgsComposer";
 import { processVideo } from "../../utils/exportVideo";
 import { loadFFMpeg } from "../../utils/ffmpeg.entry";
@@ -13,10 +13,13 @@ import { Select } from "../base/Select";
 import { useNumberField } from "./useNumberField";
 
 type CameraOption = Directions | "all";
-const cameraOptions: Option<CameraOption>[] = ([...directions, "all"] satisfies CameraOption[]).map((option) => ({
-  value: option,
-  label: option.toUpperCase()[0] + option.substring(1),
-}));
+const cameraOptions: Option<CameraOption>[] = [
+  { value: "front", label: "Front" },
+  { value: "rear", label: "Rear" },
+  { value: "left", label: "Left" },
+  { value: "right", label: "Right" },
+  { value: "all", label: "All (experimental)" },
+];
 
 export function ExportIdle({
   setExportState,
@@ -38,7 +41,7 @@ export function ExportIdle({
   }, [view, videos]);
 
   const [textToDraw, setTextToDraw] = useState("");
-  const [shouldDrawText, setShouldDrawText] = useState(false);
+  const [shouldDrawText, setShouldDrawText] = useState(true);
   const [drawTextMode, setDrawTextMode] = useState<"timestamp" | "custom">("timestamp");
 
   const fontSizeField = useNumberField(36);
@@ -54,7 +57,7 @@ export function ExportIdle({
   }, [fontSizeField.value]);
 
   const trimStartField = useNumberField(0);
-  const trimEndField = useNumberField(totalTime ?? 60);
+  const trimEndField = useNumberField(totalTime ? Math.floor(totalTime + 1) : 60);
 
   const resolvedTextToDraw = useMemo(() => {
     if (!fileMap) return undefined;
@@ -134,6 +137,7 @@ export function ExportIdle({
 
   return (
     <Box display="flex" flexDirection="column" sx={{ gap: 2 }}>
+      <Text>Please use Chrome/Edge to export videos with better performance.</Text>
       <FormControl>
         <FormControl.Label>Cameras</FormControl.Label>
         <Select<CameraOption> sx={{ width: "100%" }} value={view} onChange={(option) => setView(option)} options={cameraOptions} />
@@ -237,7 +241,7 @@ export function ExportIdle({
         Exporting does not upload your videos.
       </Text>
       <Text as="label" color="neutral.emphasis" fontSize={1}>
-        It will take few minutes to process the video, depends on your computer's performance.
+        It will take 5~20 minutes or even longer to process the video, depends on your computer's performance.
       </Text>
     </Box>
   );
