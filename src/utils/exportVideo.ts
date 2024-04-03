@@ -20,8 +20,8 @@ const spellBook = {
   merge: (
     composer: FFmpegArgsComposer,
     {
-      width: w = 1280,
-      height: h = 960,
+      width: w = 1280 / 2,
+      height: h = 960 / 2,
       directions = {
         front: true,
         rear: true,
@@ -34,11 +34,6 @@ const spellBook = {
       directions?: Record<Directions, boolean>;
     }
   ) => {
-    if (directions.front) composer.addInput(filenames.front);
-    if (directions.rear) composer.addInput(filenames.rear);
-    if (directions.left) composer.addInput(filenames.left);
-    if (directions.right) composer.addInput(filenames.right);
-
     const chain = composer.filterChain;
     chain.append(new ComplexFilterChainStep(`nullsrc=size=${w * 2}*${h * 2}`));
 
@@ -191,7 +186,7 @@ const addTimestampToVideo: ProcessWork<[baseTime: Date, textOptions: DrawTextOpt
   baseTime,
   textOptions
 ) => {
-  ffmpeg && (await ffmpeg.writeFile(filenames.font, await loadFontFile()));
+  await ffmpeg?.writeFile(filenames.font, await loadFontFile());
   spellBook.addTimestamp(composer, baseTime, textOptions);
 };
 
