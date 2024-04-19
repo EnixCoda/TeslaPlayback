@@ -1,7 +1,11 @@
-import { ProgressEvent } from "@ffmpeg/ffmpeg/types";
 import { Box, Button, ProgressBar, Text } from "@primer/react";
 import { useEffect, useState } from "react";
 import { ExportStateIdle, ExportStateProcessing } from ".";
+
+interface ProgressEvent {
+  progress: number;
+  time: number;
+}
 
 export function ExportProcessing({
   exportState,
