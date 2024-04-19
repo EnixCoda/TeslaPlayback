@@ -1,5 +1,9 @@
 import { Box, Button, Text } from "@primer/react";
 import { useState } from "react";
+import back from "../../demo/RecentClips/2024-04-16_10-10-22-back.mp4";
+import front from "../../demo/RecentClips/2024-04-16_10-10-22-front.mp4";
+import leftRepeater from "../../demo/RecentClips/2024-04-16_10-10-22-left_repeater.mp4";
+import rightRepeater from "../../demo/RecentClips/2024-04-16_10-10-22-right_repeater.mp4";
 
 const loadDemoVideoFile = (importUrl: string, filePath = importUrl, onFileLoaded?: (file: File) => void): Promise<File> =>
   fetch(importUrl)
@@ -13,7 +17,7 @@ const loadDemoVideoFile = (importUrl: string, filePath = importUrl, onFileLoaded
       return file;
     });
 
-const filesToLoad: string[] = [];
+const filesToLoad: string[] = [front, back, leftRepeater, rightRepeater];
 
 export function DemoVideoLoader({ setFileList }: { setFileList: (fileList: FileListLike) => void }) {
   const [[loaded, totalToLoad], setLoadDemoFilesProgress] = useState<[number, number]>([0, 0]);
