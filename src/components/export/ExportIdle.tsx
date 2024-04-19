@@ -18,7 +18,7 @@ const cameraOptions: Option<CameraOption>[] = [
   { value: "rear", label: "Rear" },
   { value: "left", label: "Left" },
   { value: "right", label: "Right" },
-  { value: "all", label: "All (experimental)" },
+  { value: "all", label: "Merge All (experimental)" },
 ];
 
 export function ExportIdle({
@@ -241,7 +241,8 @@ export function ExportIdle({
         Exporting does not upload your videos.
       </Text>
       <Text as="label" color="neutral.emphasis" fontSize={1}>
-        It will take 5~20 minutes or even longer to process the video, depends on your computer's performance.
+        It will take 3~20 minutes to process the video, depends on your computer's performance. You can reduce the time by reduce video duration with
+        Trim Start and Trim End.
       </Text>
     </Box>
   );
