@@ -1,4 +1,4 @@
-import { Box, Button, ProgressBar, Text } from "@primer/react";
+import { Box, Button, Text } from "@primer/react";
 import { useState } from "react";
 
 const loadDemoVideoFile = (importUrl: string, filePath = importUrl, onFileLoaded?: (file: File) => void): Promise<File> =>
@@ -13,13 +13,16 @@ const loadDemoVideoFile = (importUrl: string, filePath = importUrl, onFileLoaded
       return file;
     });
 
+const filesToLoad: string[] = [];
+
 export function DemoVideoLoader({ setFileList }: { setFileList: (fileList: FileListLike) => void }) {
   const [[loaded, totalToLoad], setLoadDemoFilesProgress] = useState<[number, number]>([0, 0]);
+
+  if (filesToLoad.length === 0) return null;
   return (
     <Box>
       <Button
         onClick={async () => {
-          const filesToLoad: string[] = [];
           function loadDemoVideoFiles(onFileLoaded?: (file: File) => void) {
             return Promise.all(filesToLoad.map((path) => loadDemoVideoFile(path, path, onFileLoaded)));
           }
@@ -35,10 +38,9 @@ export function DemoVideoLoader({ setFileList }: { setFileList: (fileList: FileL
         Try with demo files
       </Button>
       {totalToLoad > 0 && (
-        <>
-          <Text>Fetching demo video files:</Text>
-          <ProgressBar progress={(loaded / totalToLoad) * 100} />
-        </>
+        <Text>
+          Loading demo video files: {loaded}/{totalToLoad}
+        </Text>
       )}
     </Box>
   );
