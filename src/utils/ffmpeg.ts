@@ -1,4 +1,5 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
+import workerUrl from "@ffmpeg/ffmpeg/dist/esm/worker.js?worker&url";
 import { toBlobURL } from "@ffmpeg/util";
 
 // do NOT import this file directly, checkout './ffmpeg.entry.ts' instead
@@ -10,7 +11,7 @@ export async function createFFMpeg(multiThread = true) {
     coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
     wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, "application/wasm"),
     workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, "text/javascript"),
-    classWorkerURL: new URL("../../node_modules/@ffmpeg/ffmpeg/dist/esm/worker.js", import.meta.url).toString(),
+    classWorkerURL: new URL(workerUrl, import.meta.url).toString(),
   });
 
   return ffmpeg;
