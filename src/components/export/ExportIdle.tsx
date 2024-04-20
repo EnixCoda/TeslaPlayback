@@ -131,7 +131,11 @@ export function ExportIdle({
         }
       }
       console.error(err);
-      setExportState({ state: "fail", reason: `Failed processing video: ${err}` });
+      let message = err;
+      if (err === "ReferenceError: SharedArrayBuffer is not defined") {
+        message = "insecure network context";
+      }
+      setExportState({ state: "fail", reason: `Failed processing video: ${message}` });
     }
   };
 
