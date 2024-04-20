@@ -60,11 +60,7 @@ export function DashCamBrowser({ fileList }: { fileList: FileListLike }) {
               <TimestampSelect
                 sx={{ maxHeight: 600, overflowY: "auto" }}
                 options={allEventTimestampsOrdered}
-                renderOption={({ value: timestamp }) => (
-                  <>
-                    {TeslaFS.formatTimestamp(timestamp)} <CounterLabel>{Object.keys(eventGroup[timestamp]).length}</CounterLabel>
-                  </>
-                )}
+                renderOption={({ value: timestamp }) => TeslaFS.formatTimestamp(timestamp)}
                 value={currentEventTimestamp}
                 onChange={(timestamp) => {
                   setCurrentClipsTimestamp(null);
@@ -80,6 +76,7 @@ export function DashCamBrowser({ fileList }: { fileList: FileListLike }) {
               <TimestampSelect
                 sx={{ maxHeight: 600, overflowY: "auto" }}
                 options={currentEventTimestamps}
+                renderOption={({ value: timestamp }) => TeslaFS.formatTimestamp(timestamp, "time")}
                 value={currentClipsTimestamp}
                 onChange={setCurrentClipsTimestamp}
               />
@@ -92,7 +89,7 @@ export function DashCamBrowser({ fileList }: { fileList: FileListLike }) {
               </FormControl.Label>
               <Select
                 options={allEventTimestampsOrdered}
-                renderOption={({ value: timestamp }) => `${TeslaFS.formatTimestamp(timestamp)} (${Object.keys(eventGroup[timestamp]).length})`}
+                renderOption={({ value: timestamp }) => TeslaFS.formatTimestamp(timestamp)}
                 value={currentEventTimestamp}
                 onChange={(timestamp) => {
                   setCurrentClipsTimestamp(null);
@@ -104,7 +101,12 @@ export function DashCamBrowser({ fileList }: { fileList: FileListLike }) {
               <FormControl.Label>
                 Clips <CounterLabel>{currentEventTimestamps.length}</CounterLabel>
               </FormControl.Label>
-              <Select options={currentEventTimestamps} value={currentClipsTimestamp} onChange={setCurrentClipsTimestamp} />
+              <Select
+                options={currentEventTimestamps}
+                renderOption={({ value: timestamp }) => TeslaFS.formatTimestamp(timestamp, "time")}
+                value={currentClipsTimestamp}
+                onChange={setCurrentClipsTimestamp}
+              />
             </FormControl>
           </Box>
         </Box>

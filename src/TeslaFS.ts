@@ -10,9 +10,16 @@ export namespace TeslaFS {
   export const clipScopes = ["RecentClips", "SavedClips", "SentryClips"] as const;
   export type ClipScope = ValueOfArray<typeof clipScopes>;
 
-  export function formatTimestamp(timestamp: TeslaFS.Timestamp) {
+  export function formatTimestamp(timestamp: TeslaFS.Timestamp, format: "dateTime" | "date" | "time" = "dateTime") {
     const [date, time] = timestamp.split("_").map((part) => part.split("-"));
-    return [date.join("-"), time.join(":")].join(" ");
+    switch (format) {
+      case "dateTime":
+        return [date.join("-"), time.join(":")].join(" ");
+      case "date":
+        return [date.join("-")].join(" ");
+      case "time":
+        return [time.join(":")].join(" ");
+    }
   }
 
   export function parseTimestamp(timestamp: TeslaFS.Timestamp) {
