@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
     "format": "prettier --write .",
-    "preview": "vite preview",
+    "preview": "cp serve.json dist/serve.json && npx serve dist",
     "prepare": "husky"
   },
   "license": "MIT",
