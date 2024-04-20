@@ -32,7 +32,7 @@ export function ExportProcessing({
     : [progress.time / 1000000, progress.time / (progress.progress || 1) / 1000000];
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" sx={{ gap: 2 }}>
       <Box display="flex" alignItems="center" sx={{ gap: 2 }}>
         <ProgressBar sx={{ flex: 1 }} animated progress={(processedTime / TotalTimeToProcess) * 100} />
         <Text>
@@ -47,6 +47,11 @@ export function ExportProcessing({
           Cancel
         </Button>
       </Box>
+      <Box as="hr" width="100%" borderTop="none" />
+      <Text as="label" color="neutral.emphasis" fontSize={1}>
+        It will take 3~20 minutes to process the video, depends on your computer's performance. You can reduce the time by reduce video duration with
+        Trim Start and Trim End.
+      </Text>
     </Box>
   );
 }
