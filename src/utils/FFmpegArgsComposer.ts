@@ -104,7 +104,7 @@ export class DrawTextArgs {
   }
 
   setAsTimeStamp(baseTime: Date | number, format = "%Y-%m-%d %H\\:%M\\:%S") {
-    this.options.baseTime = +baseTime + "000";
+    this.options.baseTime = `${+baseTime}`;
     this.options.timeFormat = format;
     return this;
   }
