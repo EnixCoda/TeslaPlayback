@@ -6,10 +6,11 @@ Play your Tesla playback videos online!
 
 [Give a try](https://tesla.enix.one/)
 
-**Please access with Safari or Firefox, videos may not play on Chrome and Edge.**
-
 ## Features
 
-- [x] Play videos
+- [x] Play dash cam videos
+- [x] Support exporting videos
+    - Add text/timestamp overlay
+    - Merge multi-cam videos
+    - Trim video
 - [ ] Work as an offline app (PWA)
-- [ ] Support exporting clip, with multi-cam video merged
