@@ -86,6 +86,9 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
     () => Math.max(controls.front.duration, controls.rear.duration, controls.left.duration, controls.right.duration) || 0,
     [controls.front.duration, controls.rear.duration, controls.left.duration, controls.right.duration]
   );
+  useEffect(() => {
+    setProgressBarValue(playtime / (duration ?? 1));
+  }, [playtime, duration]);
 
   const playSiblingAndUpdateControl = (offset: 1 | -1) => {
     playSibling?.(offset);
