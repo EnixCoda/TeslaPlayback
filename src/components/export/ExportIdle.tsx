@@ -44,9 +44,9 @@ export function ExportIdle({
   const [shouldDrawText, setShouldDrawText] = useState(true);
   const [drawTextMode, setDrawTextMode] = useState<"timestamp" | "custom">("timestamp");
 
-  const fontSizeField = useNumberField(36);
+  const fontSizeField = useNumberField(72);
   const [drawTextOptions, setDrawTextOptions] = useState<DrawTextOptions>({
-    fontSize: 36,
+    fontSize: fontSizeField.value,
     fontColor: "#ffffff",
     box: true,
     boxColor: "#000000",
