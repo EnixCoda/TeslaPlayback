@@ -18,7 +18,7 @@ const loadDemoVideoFile = (videoUrl: string, filePath: string): Promise<File> =>
 
 type DemoFileLoader = () => File | Promise<File>;
 
-const demoFileLoaders = (): DemoFileLoader[] => [
+const demoFileLoaders: DemoFileLoader[] = [
   () => import("../../demo/2024-04-16_10-10-22-back.mp4").then((m) => loadDemoVideoFile(m.default, "2024-04-16_10-10-22-back.mp4")),
   () => import("../../demo/2024-04-16_10-10-22-front.mp4").then((m) => loadDemoVideoFile(m.default, "2024-04-16_10-10-22-front.mp4")),
   () => import("../../demo/2024-04-16_10-10-22-left_repeater.mp4").then((m) => loadDemoVideoFile(m.default, "2024-04-16_10-10-22-left_repeater.mp4")),
@@ -61,7 +61,7 @@ export function DemoVideoLoader({ setFileList }: { setFileList: (fileList: FileL
 
   return (
     <Box>
-      <Button onClick={() => setLoadDemoFilesProgress([[], demoFileLoaders()])}>Try with demo files</Button>
+      <Button onClick={() => setLoadDemoFilesProgress([[], demoFileLoaders])}>Try with demo files</Button>
       {filesToLoad.length > 0 && (
         <Text>
           Loading demo video files: {filesLoaded.length}/{filesToLoad.length}
