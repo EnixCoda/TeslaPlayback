@@ -4,7 +4,15 @@ import { useMemo } from "react";
 import { ExportStateDone, ExportStateIdle } from ".";
 import { downloadBlob } from "../../utils/general";
 
-export function ExportDone({ exportState, setExportState }: { exportState: ExportStateDone; setExportState: (state: ExportStateIdle) => void }) {
+export function ExportDone({
+  exportFileName,
+  exportState,
+  setExportState,
+}: {
+  exportFileName: string;
+  exportState: ExportStateDone;
+  setExportState: (state: ExportStateIdle) => void;
+}) {
   const { output } = exportState;
   const videoSrc = useMemo(() => URL.createObjectURL(output), [output]);
   return (
@@ -13,7 +21,7 @@ export function ExportDone({ exportState, setExportState }: { exportState: Expor
       <Box display="flex" justifyContent="space-between">
         <Button
           onClick={() => {
-            downloadBlob(output, "output.mp4");
+            downloadBlob(output, exportFileName);
           }}
           leadingVisual={DownloadIcon}
         >

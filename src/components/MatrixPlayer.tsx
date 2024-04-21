@@ -30,7 +30,17 @@ function useVideoControl() {
   };
 }
 
-export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date; videos: VideoClipGroup; playSibling?: (offset: 1 | -1) => void }) {
+export function MatrixPlayer({
+  eventName,
+  baseTime,
+  videos,
+  playSibling,
+}: {
+  eventName: string;
+  baseTime: Date;
+  videos: VideoClipGroup;
+  playSibling?: (offset: 1 | -1) => void;
+}) {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isAutoPlay, setIsAutoPlay] = useState<boolean>(isPlaying); // should equal on initial
   const [playbackRate, setPlaybackRate] = useState<number>(1);
@@ -225,6 +235,7 @@ export function MatrixPlayer({ baseTime, videos, playSibling }: { baseTime: Date
       </Box>
       <Box>
         <VideoExporter
+          eventName={eventName}
           totalTime={duration}
           videos={videos}
           videoPlayControl={{

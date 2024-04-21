@@ -36,8 +36,9 @@ export function DashCamBrowser({ fileList }: { fileList: FileListLike }) {
     eventGroup
   );
 
-  const { currentClipsTimestamp, setCurrentClipsTimestamp, currentClips } = useCurrentEventClips(currentEvent);
+  const { clipGroup, setCurrentClipsTimestamp } = useCurrentEventClips(currentEvent);
 
+  const currentClipsTimestamp = clipGroup?.timestamp ?? null;
   const playSibling = usePlaySibling(
     focusedEventGroup,
     currentEventTimestamp,
@@ -112,11 +113,12 @@ export function DashCamBrowser({ fileList }: { fileList: FileListLike }) {
         </Box>
         {/* minWidth for preventing the area grow out of view */}
         <Box as="main" flex="1" minWidth="0">
-          {currentClips && (
+          {clipGroup && (
             <MatrixPlayer
-              baseTime={currentClipsTimestamp ? TeslaFS.parseTimestamp(currentClipsTimestamp) : new Date()}
+              eventName={clipGroup.timestamp}
+              baseTime={TeslaFS.parseTimestamp(clipGroup.timestamp)}
               playSibling={playSibling}
-              videos={currentClips}
+              videos={clipGroup.clips}
             />
           )}
         </Box>

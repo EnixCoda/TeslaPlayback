@@ -32,10 +32,12 @@ export type ExportStateFail = {
 export type ExportState = ExportStateIdle | ExportStateLoadingFFMpeg | ExportStateProcessing | ExportStateDone | ExportStateFail;
 
 export const VideoExporter = memo(function VideoExporter({
+  eventName,
   totalTime,
   videos,
   videoPlayControl,
 }: {
+  eventName: string;
   totalTime: number;
   videos: VideoClipGroup;
   videoPlayControl?: {
@@ -78,7 +80,7 @@ export const VideoExporter = memo(function VideoExporter({
           case "processing":
             return <ExportProcessing exportState={exportState} setExportState={setExportState} />;
           case "done":
-            return <ExportDone exportState={exportState} setExportState={setExportState} />;
+            return <ExportDone exportState={exportState} setExportState={setExportState} exportFileName={`${eventName}.mp4`} />;
           case "fail":
             return <ExportFail exportState={exportState} setExportState={setExportState} />;
         }
