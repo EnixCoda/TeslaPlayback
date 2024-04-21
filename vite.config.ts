@@ -5,6 +5,11 @@ import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    assetsInlineLimit(filePath: string) {
+      return filePath.includes(".mp4");
+    },
+  },
   plugins: [
     {
       name: "Patch @ffmpeg/ffmpeg package.json",

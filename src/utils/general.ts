@@ -52,6 +52,17 @@ export function readFileAsArrayBuffer(file: File) {
   });
 }
 
+export function dataURLtoFile(dataUrl: string, filename: string) {
+  const arr = dataUrl.split(",");
+  const mime = arr[0].match(/:(.*?);/)?.[1];
+  const bstr = atob(arr[arr.length - 1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+
+  return new File([u8arr], filename, { type: mime });
+}
+
 export function formatDateTime(dateTime: Date) {
   // YYYY-mm-DD HH:MM:SS
   return dateTime
