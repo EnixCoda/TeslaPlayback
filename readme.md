@@ -4,6 +4,8 @@ Play your Tesla playback videos online!
 
 https://tesla.enix.one/
 
+![preview](./demo/tesla-playback-demo.gif)
+
 ## Features
 
 - [x] Play dash cam videos
@@ -12,6 +14,3 @@ https://tesla.enix.one/
   - Merge multi-cam videos
   - Trim video
 - [ ] Work as an offline app (PWA)
-
-![preview](https://user-images.githubusercontent.com/7480839/190433856-66284162-422b-4a15-adad-29902227f6df.png)
-
