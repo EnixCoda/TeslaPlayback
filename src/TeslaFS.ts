@@ -7,8 +7,8 @@ export namespace TeslaFS {
     | `${string}-${string}-${string}_${string}-${string}-${string}` // YYYY-MM-DD_HH-MM-SS
     | `${string}-${string}-${string}_${string}-${string}`; // YYYY-MM-DD_HH-MM
 
-  export const clipScopes = ["RecentClips", "SavedClips", "SentryClips"] as const;
-  export type ClipScope = ValueOfArray<typeof clipScopes>;
+  export const clipCategories = ["RecentClips", "SavedClips", "SentryClips"] as const;
+  export type ClipCategory = ValueOfArray<typeof clipCategories>;
 
   export function formatTimestamp(timestamp: TeslaFS.Timestamp, format: "dateTime" | "date" | "time" = "dateTime") {
     const [date, time] = timestamp.split("_").map((part) => part.split("-"));

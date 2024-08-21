@@ -6,9 +6,9 @@ export function SubNavs({
   value,
   onChange,
 }: {
-  options: TeslaFS.ClipScope[];
-  value: TeslaFS.ClipScope | null;
-  onChange: (scope: TeslaFS.ClipScope) => void;
+  options: TeslaFS.ClipCategory[];
+  value: TeslaFS.ClipCategory | null;
+  onChange: (scope: TeslaFS.ClipCategory) => void;
 }) {
   return (
     <SubNav>

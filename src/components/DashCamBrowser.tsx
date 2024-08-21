@@ -14,22 +14,22 @@ import { TimestampSelect } from "./TimestampSelect";
 import { Select } from "./base/Select";
 
 export function DashCamBrowser({ fileList }: { fileList: FileListLike }) {
-  const { eventGroup, eventsIndex, parserLog } = useDashCamEvents(fileList) ?? {};
-  const availableScopes = useMemo(() => TeslaFS.clipScopes.filter((scope) => !!eventsIndex[scope]?.length), [eventsIndex]);
-  const [focusedScope, setFocusedScope] = useState<TeslaFS.ClipScope | null>(null);
+  const { eventGroup, categorizedGroups, parserLog } = useDashCamEvents(fileList) ?? {};
+  const availableCategories = useMemo(() => TeslaFS.clipCategories.filter((scope) => !!categorizedGroups[scope]?.length), [categorizedGroups]);
+  const [focusedCategory, setFocusedCategory] = useState<TeslaFS.ClipCategory | null>(null);
   useEffect(() => {
-    setFocusedScope(availableScopes[0] || null);
-  }, [availableScopes]);
+    setFocusedCategory(availableCategories[0] || null);
+  }, [availableCategories]);
 
   const focusedEventGroup: PlaybackEventGroup = useMemo(() => {
-    if (focusedScope === null) return eventGroup;
+    if (focusedCategory === null) return eventGroup;
     return (
-      eventsIndex[focusedScope]?.reduce((group, timestamp) => {
+      categorizedGroups[focusedCategory]?.reduce((group, timestamp) => {
         group[timestamp] = eventGroup[timestamp];
         return group;
       }, {} as PlaybackEventGroup) ?? eventGroup
     );
-  }, [eventGroup, focusedScope, eventsIndex]);
+  }, [eventGroup, focusedCategory, categorizedGroups]);
   const allEventTimestampsOrdered = useMemo(() => getSortedKeys(focusedEventGroup), [focusedEventGroup]);
   const { currentEvent, currentEventTimestamp, setCurrentEventTimestamp, currentEventTimestamps } = useCurrentEvent(
     allEventTimestampsOrdered,
@@ -52,7 +52,9 @@ export function DashCamBrowser({ fileList }: { fileList: FileListLike }) {
       {parserLog.length > 0 && <ParserLogViewer parserLog={parserLog} />}
       <Box display="flex" flexDirection={["column", "column", "row"]} sx={{ gap: 1 }} overflow="auto">
         <Box as="nav" display="inline-flex" flexDirection="column" sx={{ gap: 2 }}>
-          {availableScopes.length > 0 && <SubNavs options={availableScopes} value={focusedScope} onChange={(scope) => setFocusedScope(scope)} />}
+          {availableCategories.length > 0 && (
+            <SubNavs options={availableCategories} value={focusedCategory} onChange={(scope) => setFocusedCategory(scope)} />
+          )}
           <Box display={["none", "none", "flex"]} flexWrap={["wrap", "nowrap", "nowrap"]} sx={{ gap: 1 }}>
             <FormControl>
               <FormControl.Label>

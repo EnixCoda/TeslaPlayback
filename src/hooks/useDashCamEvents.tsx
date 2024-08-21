@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TeslaFS } from "../TeslaFS";
-import { Directions, EventsIndex, PlaybackEventGroup } from "../common";
+import { Directions, PlaybackCategorizedGroup, PlaybackEventGroup } from "../common";
 
 const suffixToDirectionMap: Record<ValueOf<typeof TeslaFS.SUFFIXES>, Directions> = {
   [TeslaFS.SUFFIXES.FRONT]: "front",
@@ -14,7 +14,7 @@ const findTimestamp = (str?: string): TeslaFS.Timestamp | undefined => str?.matc
 
 export function useDashCamEvents(files: FileListLike) {
   return React.useMemo(() => {
-    const eventsIndex: EventsIndex = {
+    const categorizedGroups: PlaybackCategorizedGroup = {
       RecentClips: [],
       SavedClips: [],
       SentryClips: [],
@@ -43,8 +43,8 @@ export function useDashCamEvents(files: FileListLike) {
         continue;
       }
 
-      const scope = TeslaFS.clipScopes.find((scope) => splitDirectories.includes(scope));
-      if (scope) eventsIndex[scope]?.push(eventTimestamp);
+      const scope = TeslaFS.clipCategories.find((scope) => splitDirectories.includes(scope));
+      if (scope) categorizedGroups[scope]?.push(eventTimestamp);
 
       const event = (eventGroup[eventTimestamp] ||= {});
 
@@ -68,7 +68,7 @@ export function useDashCamEvents(files: FileListLike) {
 
     return {
       eventGroup,
-      eventsIndex,
+      categorizedGroups,
       parserLog,
     };
   }, [files]);

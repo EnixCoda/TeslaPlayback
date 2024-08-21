@@ -3,7 +3,7 @@ import { fetchFile } from "@ffmpeg/util";
 import fontArial from "../assets/fonts/Arial.ttf?url";
 import { Directions, directions } from "../common";
 import { ComplexFilterChainStep, DrawTextArgs, DrawTextOptions, FFmpegArgsComposer } from "./FFmpegArgsComposer";
-import { entries, formatHHMMSS, fromEntries, readFileAsArrayBuffer } from "./general";
+import { entries, formatHHMMSS, fromEntries, isNotFalsy, readFileAsArrayBuffer } from "./general";
 import { memoize } from "./memoize";
 
 const filenames = {
@@ -145,17 +145,20 @@ export const processVideoWork: ProcessWork<
     }
   ]
 > = async (ffmpeg, composer, files, { textToDraw, textStyle, trim }): Promise<void> => {
-  let count = 0;
-  for (const direction of directions) {
-    const file = files[direction];
-    if (file) {
-      count += 1;
-      await ffmpeg?.writeFile(filenames[direction], new Uint8Array(await readFileAsArrayBuffer(file)));
-      composer.addInput(filenames[direction]);
-    }
-  }
-
+  const tasks = directions
+    .map((direction) => {
+      const file = files[direction];
+      if (file) {
+        return async () => {
+          await ffmpeg?.writeFile(filenames[direction], new Uint8Array(await readFileAsArrayBuffer(file)));
+          composer.addInput(filenames[direction]);
+        };
+      }
+    })
+    .filter(isNotFalsy);
+  const count = tasks.length;
   if (count === 0) throw new Error("No video input");
+  await Promise.all(tasks.map((fn) => fn()));
 
   if (count > 1) {
     spellBook.merge(composer, {
