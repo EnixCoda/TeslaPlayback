@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { PlaybackEventGroup } from "../common";
 import { getSortedKeys } from "../utils/general";
 

@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon, ColumnsIcon, PlayIcon, StopwatchIcon, VersionsIcon } from "@primer/octicons-react";
 import { Box, Checkbox, FormControl, IconButton, Text } from "@primer/react";
-import * as React from "react";
+import React from "react";
 import { useEffect, useState } from "react";
 import { Directions, VideoClipGroup } from "../common";
 import { LayoutKey, layoutKeys, useVideosLayout } from "../hooks/useVideosLayout";
@@ -202,35 +202,37 @@ export function MatrixPlayer({
         </Box>
       </Box>
       <Box bg="neutral.muted" position="relative" borderWidth={1} borderStyle="solid" borderColor="border.default" borderRadius={4}>
-        <LayoutComposer
-          style={layout.container}
-          decorator={(index, element) =>
-            React.cloneElement(element, {
-              ...element.props,
-              style: {
-                ...element.props.style,
-                ...layout.children[index],
-              },
-            })
-          }
-        >
-          <div>
-            <Video label={"Front"} ref={controls.front.ref} file={videos.front} {...getVideoProps(controls.front)} />
-          </div>
-          <div>
-            <Video label={"Rear"} ref={controls.rear.ref} file={videos.rear} {...getVideoProps(controls.rear)} />
-          </div>
-          <div>
-            <Video label={"Left"} ref={controls.left.ref} file={videos.left} {...getVideoProps(controls.left)} />
-          </div>
-          <div>
-            <Video label={"Right"} ref={controls.right.ref} file={videos.right} {...getVideoProps(controls.right)} />
-          </div>
-        </LayoutComposer>
-        <Box position="absolute" top="0" left="0" p={0} bg="#000" lineHeight="1">
-          <Text color="#fff" fontFamily="mono" fontSize="2vw">
+        <Box p={0} bg="#000" lineHeight="1">
+          <Text color="#fff" fontFamily="mono" fontSize="18px">
             {formatDateTime(shiftTime(baseTime, playtime))}
           </Text>
+        </Box>
+        <Box position="relative">
+          <LayoutComposer
+            style={layout.container}
+            decorator={(index, element) =>
+              React.cloneElement(element, {
+                ...element.props,
+                style: {
+                  ...element.props.style,
+                  ...layout.children[index],
+                },
+              })
+            }
+          >
+            <div>
+              <Video ref={controls.front.ref} file={videos.front} {...getVideoProps(controls.front)} />
+            </div>
+            <div>
+              <Video ref={controls.rear.ref} file={videos.rear} {...getVideoProps(controls.rear)} />
+            </div>
+            <div>
+              <Video ref={controls.left.ref} file={videos.left} {...getVideoProps(controls.left)} />
+            </div>
+            <div>
+              <Video ref={controls.right.ref} file={videos.right} {...getVideoProps(controls.right)} />
+            </div>
+          </LayoutComposer>
         </Box>
       </Box>
       <Box>

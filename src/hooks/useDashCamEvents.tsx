@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { TeslaFS } from "../TeslaFS";
 import { Directions, PlaybackCategorizedGroup, PlaybackEventGroup } from "../common";
 
