@@ -1,10 +1,9 @@
 import { Box, Button, Checkbox, FormControl, Radio, RadioGroup, Text, TextInput } from "@primer/react";
 import { useEffect, useMemo, useState } from "react";
-import UAParserJS from "ua-parser-js";
 import { ExportState } from ".";
 import { TeslaFS } from "../../TeslaFS";
 import { Directions, VideoClipGroup } from "../../common";
-import { DrawTextOptions } from "../../utils/FFmpegArgsComposer";
+import { DrawTextStyle } from "../../utils/ffmpegArgsComposer/DrawTextArgs";
 import { processVideo } from "../../utils/exportVideo";
 import { loadFFMpeg } from "../../utils/ffmpeg.entry";
 import { entries, getBlob } from "../../utils/general";
@@ -18,7 +17,7 @@ const cameraOptions: Option<CameraOption>[] = [
   { value: "rear", label: "Rear" },
   { value: "left", label: "Left" },
   { value: "right", label: "Right" },
-  { value: "all", label: "Merge All (experimental)" },
+  { value: "all", label: "Grid (2×2)" },
 ];
 
 export function ExportIdle({
@@ -45,7 +44,7 @@ export function ExportIdle({
   const [drawTextMode, setDrawTextMode] = useState<"timestamp" | "custom">("timestamp");
 
   const fontSizeField = useNumberField(72);
-  const [drawTextOptions, setDrawTextOptions] = useState<DrawTextOptions>({
+  const [drawTextOptions, setDrawTextOptions] = useState<DrawTextStyle>({
     fontSize: fontSizeField.value,
     fontColor: "#ffffff",
     box: true,
@@ -57,7 +56,7 @@ export function ExportIdle({
   }, [fontSizeField.value]);
 
   const trimStartField = useNumberField(0);
-  const trimEndField = useNumberField(totalTime ? Math.floor(totalTime + 1) : 60);
+  const trimEndField = useNumberField(2 ?? (totalTime ? Math.floor(totalTime + 1) : 60));
 
   const resolvedTextToDraw = useMemo(() => {
     if (!fileMap) return undefined;
@@ -82,7 +81,11 @@ export function ExportIdle({
       let failed = false;
       setExportState({ state: "loadingFFMpeg" });
       const ffmpeg = await loadFFMpeg();
-      setExportState({ state: "processing", ffmpeg, totalTime: trimEndField.value - trimStartField.value || undefined });
+      setExportState({
+        state: "processing",
+        ffmpeg,
+        totalTime: trimEndField.value - trimStartField.value || undefined,
+      });
       ffmpeg.on("log", ({ message }) => {
         console.log("[ffmpeg]", message);
         switch (message) {
@@ -94,8 +97,13 @@ export function ExportIdle({
         }
       });
       const outputFile = await processVideo(ffmpeg, fileMap, {
-        textToDraw: resolvedTextToDraw,
-        textStyle: drawTextOptions,
+        text:
+          resolvedTextToDraw !== undefined
+            ? {
+                content: resolvedTextToDraw,
+                style: drawTextOptions,
+              }
+            : undefined,
         trim: {
           startTime: trimStartField.value,
           endTime: trimEndField.value,
@@ -117,11 +125,17 @@ export function ExportIdle({
           case "called FFmpeg.terminate()":
             return;
           case "Failed to execute 'postMessage' on 'Worker': ArrayBuffer at index 0 is already detached.":
-            setExportState({ state: "fail", reason: "Failed to relaunch Web Worker. Please refresh and retry." });
+            setExportState({
+              state: "fail",
+              reason: "Failed to relaunch Web Worker. Please refresh and retry.",
+            });
             return;
           default:
             if (err.message.startsWith("Failed to fetch dynamically imported module:")) {
-              setExportState({ state: "fail", reason: "Failed to load extra dependency for processing videos. Please enable network and retry." });
+              setExportState({
+                state: "fail",
+                reason: "Failed to load extra dependency for processing videos. Please enable network and retry.",
+              });
               return;
             }
 
@@ -141,14 +155,10 @@ export function ExportIdle({
 
   return (
     <Box display="flex" flexDirection="column" sx={{ gap: 2 }}>
-      <Text>Please use Chrome/Edge to export videos with better performance.</Text>
+      <Text>Please use Firefox, otherwise export might fail.</Text>
       <FormControl>
         <FormControl.Label>Cameras</FormControl.Label>
         <Select<CameraOption> sx={{ width: "100%" }} value={view} onChange={(option) => setView(option)} options={cameraOptions} />
-        {view === "all" && !new UAParserJS().getBrowser().name?.includes("Firefox") && (
-          <FormControl.Validation variant="error">Merging all is only supported on Firefox.</FormControl.Validation>
-        )}
-        <FormControl.Caption>The source camera for exporting. Choose "All" to merge videos from 4 cameras.</FormControl.Caption>
       </FormControl>
       <FormControl>
         <Checkbox checked={shouldDrawText} onChange={(e) => setShouldDrawText(e.target.checked)} />

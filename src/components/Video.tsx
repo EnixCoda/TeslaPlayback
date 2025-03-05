@@ -38,6 +38,7 @@ export const Video = React.forwardRef<Ref, Props>(function Video({ file, label, 
         video.removeEventListener("error", handleError);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ export const Video = React.forwardRef<Ref, Props>(function Video({ file, label, 
         video.src = "";
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
 
   useEffect(() => {

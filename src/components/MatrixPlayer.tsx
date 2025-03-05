@@ -202,7 +202,7 @@ export function MatrixPlayer({
         </Box>
       </Box>
       <Box bg="neutral.muted" position="relative" borderWidth={1} borderStyle="solid" borderColor="border.default" borderRadius={4}>
-        <Box p={0} bg="#000" lineHeight="1">
+        <Box p={0} bg="#000" lineHeight="1" display="flex" justifyContent="center" alignItems="center">
           <Text color="#fff" fontFamily="mono" fontSize="18px">
             {formatDateTime(shiftTime(baseTime, playtime))}
           </Text>
