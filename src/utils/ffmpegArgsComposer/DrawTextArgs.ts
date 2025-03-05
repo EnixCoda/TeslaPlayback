@@ -34,7 +34,7 @@ export class DrawTextArgs {
     return this;
   }
 
-  setAsTimeStamp(baseTime: Date | number, format = "%Y-%m-%d %H\\:%M\\:%S") {
+  setAsTimeStamp(baseTime: Date | number, format = "%Y-%m-%d %H:%M:%S") {
     this.options.baseTime = `${+baseTime}`;
     this.options.timeFormat = format;
     return this;
