@@ -56,7 +56,7 @@ export function ExportIdle({
   }, [fontSizeField.value]);
 
   const trimStartField = useNumberField(0);
-  const trimEndField = useNumberField(2 ?? (totalTime ? Math.floor(totalTime + 1) : 60));
+  const trimEndField = useNumberField(totalTime ? Math.floor(totalTime + 1) : 60);
 
   const resolvedTextToDraw = useMemo(() => {
     if (!fileMap) return undefined;
