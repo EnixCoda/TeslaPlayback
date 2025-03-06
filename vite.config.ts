@@ -13,14 +13,19 @@ export default defineConfig({
   },
   plugins: [
     {
-      name: "Patch @ffmpeg/ffmpeg package.json",
+      name: "Patch @ffmpeg packages",
       buildStart: () => {
-        const ffmpegPackageJsonPath = path.resolve(__dirname, "node_modules/@ffmpeg/ffmpeg/package.json");
-        const packageJson = JSON.parse(fs.readFileSync(ffmpegPackageJsonPath, "utf-8"));
-        if (packageJson.exports) {
-          Reflect.deleteProperty(packageJson, "exports");
-          fs.writeFileSync(ffmpegPackageJsonPath, JSON.stringify(packageJson, null, 2), "utf-8");
-        }
+        const filesToPatch = [
+          path.resolve(__dirname, "node_modules/@ffmpeg/ffmpeg/package.json"),
+          path.resolve(__dirname, "node_modules/@ffmpeg/core-mt/package.json"),
+        ];
+        filesToPatch.forEach((p) => {
+          const packageJson = JSON.parse(fs.readFileSync(p, "utf-8"));
+          if (packageJson.exports) {
+            Reflect.deleteProperty(packageJson, "exports");
+            fs.writeFileSync(p, JSON.stringify(packageJson, null, 2), "utf-8");
+          }
+        });
       },
     },
     react(),
